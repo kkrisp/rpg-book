@@ -1,0 +1,2 @@
+item_kard
+item_turelem item_grillcsirke

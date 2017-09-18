@@ -1,0 +1,30 @@
+PAGE start
+CONTENT Mikor atkelnel a hidon egy troll alja el az utadat.
+
+ACT c.txt
+Megkerdezem, miert allja el az utam.
+
+ACT a.txt
+Varok. 
+
+ACT lekardoz item_kard GET item_bunkosbot item_budos_alsonadrag
+Lekardozom.
+
+SPEC item_grillcsirke
+Erosen szimatol a tarisznyad fele... 
+
+ACT b.txt item_grillcsirke
+Felajanlom neki a sult csirkem felet!
+
+CONTENT Mit teszel?
+ENDPAGE
+
+PAGE lekardoz
+CONTENT Kiontod belit az fenevadnak, es kifosztod a tetemet. Egy bunkosbot es egy hasznalt alsonadrag kerul a birtokodba...
+
+ACT asd
+Visszafordulok.
+
+ACT asd item_turelem
+Atmegzek a hidon
+ENDPAGE
