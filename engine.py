@@ -1,3 +1,12 @@
+# A program a lapozgatos szerepjatekkonyveket
+# szimulalja, melyeknek minden lapjan van egy
+# leiras es valasztasi lehetosegek, hova
+# lapozzon a jatekos tovabb... 
+
+# A program text fajloket olvas be, es bizonyos
+# flagek szerint meghatarozza az oldalakat, azokon a
+# szoveget, a valaszlehetosegeket es a targyakat/felteteleket...
+
 import sys
 
 # a konyv egy oldala - kiirasra keszen...
@@ -22,7 +31,7 @@ class Page:
     def add_action(self, action):
         self.actions.append(action)
 
-# kiirasra kesz valasz
+# kiirasra kesz valasz...
 class Action:
     def __init__(self):
         self.text = "empty action"
@@ -64,6 +73,9 @@ def matchelement(list1, element2):
             return True
     return False
 
+# ez a fuggveny allitja ossze az oldalt
+# csak azokat a reszeket rakja bele, amelyek
+# a profilnak megfelelnek...
 def page_processor(fh):
     page = Page()
     istext = False
@@ -87,28 +99,25 @@ def page_processor(fh):
             rm = False
             line_elements = line.split(sep=" ")
             action = Action()
-            action.add_destination(line_elements[1])
+            action.add_destination(line_elements[1].strip())
 
-            if len(line_elements) <= 2:
-                line_elements.append("default")
+            #if len(line_elements) <= 2:
+            #    line_elements.append("default")
+            match = True
             for x in range(2, len(line_elements)):
                 if line_elements[x] == "GET":
                     get = True
-                    rm = False
-                elif line_elements[x] == "RM":
-                    rm = True
-                    get = False
                 elif get:
                     action.add_reward(line_elements[x].strip())
-                else:
-                    if matchelement(profile, line_elements[x]):
-                        action.add_text(fh.readline().strip())
-                        page.add_action(action)
-                        
+                elif not matchelement(profile, line_elements[x]):
+                    match = False
+            if match:
+                action.add_text(fh.readline().strip())
+                page.add_action(action)
         elif line.startswith("ENDPAGE"):
             break
-        elif istext:
-            page.add_text(line.strip() + ' ')
+        elif istext and line != "\n":
+            page.add_text("\n" + line.strip())
     return page
 
 def choose_action(page):
