@@ -23,7 +23,7 @@ class Page:
         print()
         for x in range(0, len(self.actions)):
             print(abc[x] + ") - " + self.actions[x].text)
-        print("\n[x - kilepes]\t[p - profil]")
+        print("\n[x - kilepes]\t[t - targyak]")
 
     def add_text(self, text):
         self.text = self.text + text
@@ -37,12 +37,16 @@ class Action:
         self.text = "empty action"
         self.destination = "END"
         self.reward = []
+        self.lose = []
     
     def add_destination(self, destination):
         self.destination = destination
     
     def add_reward(self, reward):
         self.reward.append(reward)
+
+    def add_lose(self, lose):
+        self.lose.append(lose)
 
     def add_text(self, text):
         self.text = text
@@ -95,22 +99,31 @@ def page_processor(fh):
         
         elif line.startswith("ACT"):
             istext = False
-            get = False
-            rm = False
             line_elements = line.split(sep=" ")
             action = Action()
             action.add_destination(line_elements[1].strip())
-
-            #if len(line_elements) <= 2:
-            #    line_elements.append("default")
+            
+            mode = "CRIT"
             match = True
             for x in range(2, len(line_elements)):
                 if line_elements[x] == "GET":
-                    get = True
-                elif get:
+                    mode = "GET"
+                elif line_elements[x] == "NOT":
+                    mode = "NOT"
+                elif line_elements[x] == "RM":
+                    mode = "RM"
+                elif mode == "GET":
                     action.add_reward(line_elements[x].strip())
-                elif not matchelement(profile, line_elements[x]):
-                    match = False
+                elif mode == "NOT":
+                    if matchelement(profile, line_elements[x]):
+                        match = False
+                        break
+                elif mode == "RM":
+                    action.add_lose(line_elements[x].strip())
+                elif mode == "CRIT":
+                    if not matchelement(profile, line_elements[x]):
+                        match = False
+                        break
             if match:
                 action.add_text(fh.readline().strip())
                 page.add_action(action)
@@ -121,7 +134,7 @@ def page_processor(fh):
     return page
 
 def choose_action(page):
-    options = {'p':-2, 'x':-1, 'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7, 'i':8}
+    options = {'t':-2, 'x':-1, 'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7, 'i':8}
     while 1:
         opt = input()
         try:
@@ -133,11 +146,16 @@ def choose_action(page):
                     return "end"
                 if opt_num == -2:
                     print()
-                    print(profile)
+                    for element in profile:
+                        asd = element.split(sep="_", maxsplit=1)
+                        if asd[0] == "item":
+                            sys.stdout.write("[" + asd[1] + "] ")
                     page.print_actions()
                 else:
                     for element in page.actions[opt_num].reward:
                         profile.append(element)
+                    for element in page.actions[opt_num].lose:
+                        profile.remove(element)
                     return page.actions[opt_num].destination
         except KeyError:
             print("Nincs ilyen opcio!")

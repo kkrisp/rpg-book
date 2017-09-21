@@ -7,7 +7,7 @@ Megkerdezem, miert allja el az utam.
 ACT a.txt
 Varok. 
 
-ACT lekardoz item_kard GET item_bunkosbot item_budos_alsonadrag
+ACT lekardoz item_kard GET item_bunkosbot item_budos_alsonadrag RM item_kard
 Lekardozom.
 
 SPEC item_grillcsirke
@@ -64,6 +64,8 @@ PAGE talalos_kerdes
 CONTENT - Mi az, zold es art a fogaknak?
 SPEC troll_joindulata
 Tudod ez ilyen vicces kerdes. - mondja a zoldboru melak.
+ACT rossz NOT troll_joindulata
+Hat nem mas mint az ORK!
 ACT helyes GET troll_sertodott
 Talan az orkok? Vagy... ja nem, a trollok!
 ACT helyes troll_joindulata GET trolltarto
@@ -72,8 +74,10 @@ ACT rossz
 Traktor?
 ACT rossz
 Romlott kaja?
-ACT anyad
+ACT anyad troll_joindulata
 Anyad.
+ACT anyad2 NOT troll_joindulata
+Anyad
 ENDPAGE
 
 PAGE helyes
@@ -89,9 +93,11 @@ CONTENT - Rossz valasz... - mondja a troll es megesz.
 ENDPAGE
 
 PAGE anyad
-CONTENT - Meg ilyet az anyam szent volt! Most megeszlek!
-SPEC troll_joindulata
-Nem is csak vicceltem, ami igaz, az igaz... Nezz csak ra a fogsoromra!
+CONTENT HAHHAHA, ami igaz, az igaz... Nezz csak ra a fogsoromra!
 ACT tovabb troll_joindulata GET trolltarto
 Tessek, itt egy trolltarto az ugyes valaszert!
+ENDPAGE
+
+PAGE anyad2
+CONTENT - A tiéd - mondja. Aztán megesz.
 ENDPAGE
