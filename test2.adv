@@ -1,0 +1,104 @@
+TITLE A troll a hidon 2
+PAGE start
+CONTENT Mikor atkelnel a hidon egy troll alja el az utadat.
+
+ACT kerdes
+Megkerdezem, miert allja el az utam.
+
+ACT a.txt
+Varok. 
+
+ACT lekardoz item_kard GET item_bunkosbot item_budos_alsonadrag RM item_kard
+Lekardozom.
+
+SPEC item_grillcsirke
+Erosen szimatol a tarisznyad fele... 
+
+ACT csirke item_grillcsirke
+Felajanlom neki a sult csirkem felet!
+
+CONTENT Mit teszel?
+ENDPAGE
+
+PAGE lekardoz
+CONTENT Kiontod belit az fenevadnak, de sajnos eltorik a kardod. Amikor kifosztod a tetemet egy bunkosbot es egy hasznalt alsonadrag kerul a birtokodba...
+
+ACT asd
+Visszafordulok.
+
+ACT asd item_turelem
+Atmegyek a hidon
+ENDPAGE
+
+PAGE csirke
+CONTENT A trollnak az egesz csirke kell
+
+ACT odaad
+Odaadom az egeszet.
+
+ACT nemad
+Nem adom oda neki a csirket
+ENDPAGE
+
+PAGE odaad
+CONTENT A troll felfalja a hust aztan azt mondja:
+- Ezert cserebe a talalos kerdesem is konnyebb lesz!
+
+ACT talalos_kerdes GET troll_joindulata
+Mondd hat, mi leszen az!
+
+ENDPAGE
+
+PAGE nemad
+CONTENT A troll nagyon merges lesz es megesz. Aztan a csirket is desszertnek... Vesztettel!
+ENDPAGE
+
+PAGE kerdes
+CONTENT A troll azt mondja:
+- Csak akkor engedlek at, ha megvalaszolod a talalos kerdesemet!
+
+ACT talalos_kerdes
+Mondd hat azt a kerdest, te troll!
+ENDPAGE
+
+PAGE talalos_kerdes
+CONTENT - Mi az, zold es art a fogaknak?
+SPEC troll_joindulata
+Tudod ez ilyen vicces kerdes. - mondja a zoldboru melak.
+ACT rossz NOT troll_joindulata
+Hat nem mas mint az ORK!
+ACT helyes GET troll_sertodott
+Talan az orkok? Vagy... ja nem, a trollok!
+ACT helyes troll_joindulata GET trolltarto
+Hat nem mas, mint a TROLL!
+ACT rossz
+Traktor?
+ACT rossz
+Romlott kaja?
+ACT anyad troll_joindulata
+Anyad.
+ACT anyad2 NOT troll_joindulata
+Anyad
+ENDPAGE
+
+PAGE helyes
+CONTENT - Igen, jol megvalaszoltad a kerdesem.
+SPEC troll_sertodott
+De mivel osszekevertel az orkokkal, most megjegyzed miert art a fogaknak a troll!
+SPEC troll_joindulata
+Ezt pedig fogadd el, jo hasznat veszed az uton! - mondja es atad egy trolltartot.
+ENDPAGE
+
+PAGE rossz
+CONTENT - Rossz valasz... - mondja a troll es megesz.
+ENDPAGE
+
+PAGE anyad
+CONTENT HAHHAHA, ami igaz, az igaz... Nezz csak ra a fogsoromra!
+ACT tovabb troll_joindulata GET trolltarto
+Tessek, itt egy trolltarto az ugyes valaszert!
+ENDPAGE
+
+PAGE anyad2
+CONTENT - A tiéd - mondja. Aztán megesz.
+ENDPAGE

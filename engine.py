@@ -23,7 +23,7 @@ class Page:
         print()
         for x in range(0, len(self.actions)):
             print(abc[x] + ") - " + self.actions[x].text)
-        print("\n[x - kilepes]\t[t - targyak]")
+        print("\n[x - kilepes]\t[t - targyak]\t[s - mentes]")
 
     def add_text(self, text):
         self.text = self.text + text
@@ -106,12 +106,9 @@ def page_processor(fh):
             mode = "CRIT"
             match = True
             for x in range(2, len(line_elements)):
-                if line_elements[x] == "GET":
-                    mode = "GET"
-                elif line_elements[x] == "NOT":
-                    mode = "NOT"
-                elif line_elements[x] == "RM":
-                    mode = "RM"
+                if mode == "CRIT":
+                    if line_elements[x] == ("GET","NOT","RM"):
+                        mode = line_elements[x]
                 elif mode == "GET":
                     action.add_reward(line_elements[x].strip())
                 elif mode == "NOT":
@@ -134,7 +131,7 @@ def page_processor(fh):
     return page
 
 def choose_action(page):
-    options = {'t':-2, 'x':-1, 'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7, 'i':8}
+    options = {'s':-3, 't':-2, 'x':-1, 'a':0, 'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7, 'i':8}
     while 1:
         opt = input()
         try:
@@ -145,12 +142,17 @@ def choose_action(page):
                 if opt_num == -1:
                     return "end"
                 if opt_num == -2:
-                    print()
+                    print("Targyak kiiratasa\nTargyak kiiratasa")
                     for element in profile:
                         asd = element.split(sep="_", maxsplit=1)
+                        print(asd)
                         if asd[0] == "item":
                             sys.stdout.write("[" + asd[1] + "] ")
+                        else:
+                            print("Nemitem")
                     page.print_actions()
+                if opt_num == -3:
+                    print("Nincs meg mentes...")
                 else:
                     for element in page.actions[opt_num].reward:
                         profile.append(element)
@@ -178,7 +180,17 @@ def file_processor(filename, pagename):
 
 current_file = "test.txt"
 current_page = "start"
-profile = load_profile("pistike867.txt")
+profile = []
+print("rp_book 0.1 version")
+print("n) - new game")
+print("l) - load profile")
+opt = input()
+
+if opt == 'l':
+    print("Profil filename: ")
+    name = input()
+    profile = load_profile(name)
+
 while current_page != "end":
     #print(current_page)
     current_page = file_processor(current_file, current_page)
