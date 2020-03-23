@@ -52,7 +52,7 @@ class Action:
         self.text = text
 
 def load_profile(filename):
-    profile = ["default"]
+    profile = ["item_kard", "item_pajzs"]
     try:
         with open(filename) as fh:
             for line in fh:
@@ -141,17 +141,19 @@ def choose_action(page):
             else:
                 if opt_num == -1:
                     return "end"
-                if opt_num == -2:
-                    print("Targyak kiiratasa\nTargyak kiiratasa")
+                elif opt_num == -2:
+                    print("X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X")
+                    print("|  A kovetkezo targyak vannak a birtokodban  |")
+                    print("X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X")
+                    item_list = "| "
                     for element in profile:
                         asd = element.split(sep="_", maxsplit=1)
-                        print(asd)
                         if asd[0] == "item":
-                            sys.stdout.write("[" + asd[1] + "] ")
-                        else:
-                            print("Nemitem")
+                            item_list += " " + asd[1] + " "
+                    print(item_list)
+                    print("X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X")
                     page.print_actions()
-                if opt_num == -3:
+                elif opt_num == -3:
                     print("Nincs meg mentes...")
                 else:
                     for element in page.actions[opt_num].reward:
