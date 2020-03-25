@@ -1,5 +1,5 @@
 PAGE start
-CONTENT Mikor atkelnel a hidon egy troll alja el az utadat.
+CONTENT Mikor atkelnel a hidon egy troll allja el az utadat.
 
 ACT kerdes
 Megkerdezem, miert allja el az utam.
