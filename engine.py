@@ -9,6 +9,7 @@
 
 import sys
 
+
 # a konyv egy oldala - kiirasra keszen...
 class Page:
     def __init__(self):
@@ -30,6 +31,7 @@ class Page:
 
     def add_action(self, action):
         self.actions.append(action)
+
 
 # kiirasra kesz valasz...
 class Action:

@@ -1,0 +1,18 @@
+--
+-1-Oldal----
+Elso. Amikor at akarsz kelni a hidon, egy troll all veled szemben
+->------Valaszok
+Az elsohoz [kard/batorsag] 1
+Masodikhoz [turelem/-sult_csirke] 1
+Harmadikhoz [sult_csirke] 3
+--
+-2-Oldal----
+Masodik. A trollt megolod, de ujraeled.
+->------Valaszok
+Teszt valasz a 2. kerdeshez [] 1
+Teszt valasz a 2. kerdeshez [] 3
+-3-Oldal----
+Harmadik. A trollt megolod, de ujraeled.
+->------Valaszok
+Teszt valasz a 2. kerdeshez [] 1
+Teszt valasz a 3. kerdeshez [] 3
