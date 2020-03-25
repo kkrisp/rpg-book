@@ -20,10 +20,42 @@ buttons = [
     "SAVE GCODE"
 ]
 
-def draw_layout(screen, x0, y0, fileName):
-        layout = open(fileName, 'r')
-        screen.addstr(x0, y0, layout.read())
-        layout.close()
+
+def hatteret_feltolt(fajlnev, hatter):
+    hatter_fajl = open(fajlnev, 'r')
+    for sor in hatter_fajl:
+        hatter.append(sor)  # minden sor vegerol eltavolitva a newline karakter
+    hatter_fajl.close()
+
+
+def hatter_rajzolasa(kepernyo, hatter, x_pos=0, y_pos=0):
+    x_szamlalo = 0
+    for sor in hatter:
+        kepernyo.addstr(x_pos + x_szamlalo, y_pos, sor)
+        x_szamlalo += 1
+
+
+def hatter_rajzolasa_kozepre(kepernyo, hatter):
+    x_max, y_max = stdscr.getmaxyx()  # get size of the screen
+    hatter_szelesseg = len(hatter[0])
+    hatter_magassag = len(hatter)
+    x_pos = int((x_max-hatter_magassag)/2)
+    y_pos = int((y_max-hatter_szelesseg)/2)
+    x_szamlalo = 0
+    if hatter_magassag > x_max:
+        print("nem eleg magas kepernyo")
+    for sor in hatter:
+        kepernyo.addstr(x_pos + x_szamlalo, y_pos, sor)
+        x_szamlalo += 1
+
+
+def hatter_szoveg_kordinata(kepernyo, hatter, x_belul=0, y_belul=0):
+    x_max, y_max = stdscr.getmaxyx()  # get size of the screen
+    hatter_szelesseg = len(hatter[0])
+    hatter_magassag = len(hatter)
+    x_pos = int((x_max-hatter_magassag)/2) + x_belul
+    y_pos = int((y_max-hatter_szelesseg)/2) + y_belul
+    return x_pos, y_pos
 
 def draw_list(screen, x0, y0, elements, highlight, spacing=1, refresh=True):
     """Writes out list elements to the screen, highlights the ones
@@ -123,6 +155,11 @@ def get_adventure_titles():
             title_list.append(title)
     return title_list
 
+
+egyszeru_hatter = []
+hatteret_feltolt("jelenet_hatter.txt", egyszeru_hatter)
+
+# itt kezdodik a curses ablak
 stdscr = curses.initscr() # returns a window object
 curses.noecho()           # turns off automatic echoing keys to the screen
 curses.cbreak()           # reacting to keypresses without pressing enter
@@ -135,11 +172,14 @@ welcome_text = "Valaszthato kalandok:"
 available_adventures = get_adventure_titles()
 currentlySelected = 0
 maxindex = len(available_adventures)
+szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
 
 try:
     while 1:
+        hatter_rajzolasa_kozepre(stdscr, egyszeru_hatter)
         stdscr.addstr(maxx/4, int(maxy/2-len(welcome_text)/2), welcome_text)
         draw_list(stdscr, maxx/4+1, int(maxy/2-len(welcome_text)/2), available_adventures, currentlySelected)
+        stdscr.addstr(szoveg_x, szoveg_y, "Lorem Ipsum")
         c = stdscr.getch()
         # exit program
         if c == ord('q'):
