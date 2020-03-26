@@ -7,6 +7,7 @@ from datetime import datetime # for dating logfileElmenti a jatek ideje
 import argparse
 import curses # for visual commands
 #import getch
+import karakter as kar
 
 # arguments
 argParser = argparse.ArgumentParser(description="Kaland es kockazat!")
@@ -156,6 +157,41 @@ def get_adventure_titles():
     return title_list
 
 
+def karakterlapot_rajzol(kepernyo, karakter_in, x_pos=0, y_pos=0):
+    nevsor = karakter_in.nev
+    sorhossz = 22 + 2
+    alahuzas = "-" * sorhossz
+    sorszam = 0
+    kepernyo.addstr(x_pos+sorszam, y_pos, nevsor)
+    sorszam += 1
+    kepernyo.addstr(x_pos+sorszam, y_pos, alahuzas)
+    sorszam += 1
+    eletero_sor = "  eletero          " + str(karakter_in.eletero) + "/" + str(karakter_in.max_eletero)
+    kepernyo.addstr(x_pos+sorszam, y_pos, eletero_sor)
+    sorszam += 1
+    for tul in karakter_in.tulajdonsagok.keys():
+        #alahuzas = " -" + "-" * sorhossz
+        szunetek = (sorhossz - len(tul) - 7) * " "
+        #tulajdonsagsor = " | " + tul + szunetek + "| " + str(karakter_in.tulajdonsagok[tul]) + " |"
+        tulajdonsagsor = "  " + tul + szunetek + " " + str(karakter_in.tulajdonsagok[tul])
+        kepernyo.addstr(x_pos+sorszam, y_pos, tulajdonsagsor)
+        sorszam += 1
+        #kepernyo.addstr(x_pos+sorszam, y_pos, alahuzas)
+        #sorszam += 1
+    x_pos = x_pos + 15
+    sorszam = 0
+    kepernyo.addstr(x_pos+sorszam, y_pos, "Targyak:         ")
+    sorszam += 1
+    for targy in karakter_in.targyak:
+        kepernyo.addstr(x_pos+sorszam, y_pos, "  " + targy)
+        sorszam += 1
+
+foszereplo = kar.Karakter()
+foszereplo.nev = "Veer Istvan"
+foszereplo.targyak.append("Alma")
+foszereplo.targyak.append("Gyogyito ital")
+foszereplo.targyak.append("Kotel")
+
 egyszeru_hatter = []
 hatteret_feltolt("jelenet_hatter.txt", egyszeru_hatter)
 
@@ -169,20 +205,23 @@ maxx, maxy = stdscr.getmaxyx()  # get size of the screen
 curses.curs_set(0)              # set cursor out of the screen
 
 welcome_text = "Valaszthato kalandok:"
-available_adventures = get_adventure_titles()
+#available_adventures = get_adventure_titles()
 currentlySelected = 0
-maxindex = len(available_adventures)
+#maxindex = len(available_adventures)
 szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
-
+aktiv_karakterlap = False
 try:
     while 1:
         hatter_rajzolasa_kozepre(stdscr, egyszeru_hatter)
-        stdscr.addstr(maxx/4, int(maxy/2-len(welcome_text)/2), welcome_text)
-        draw_list(stdscr, maxx/4+1, int(maxy/2-len(welcome_text)/2), available_adventures, currentlySelected)
-        stdscr.addstr(szoveg_x, szoveg_y, "Lorem Ipsum")
+        if aktiv_karakterlap:
+            karakterlapot_rajzol(stdscr, foszereplo, szoveg_x, szoveg_y)
+        else:
+            #stdscr.addstr(int(maxx/4), int(maxy/2-len(welcome_text)/2), welcome_text)
+            #draw_list(stdscr, int(maxx/4+1), int(maxy/2-len(welcome_text)/2), available_adventures, currentlySelected)
+            stdscr.addstr(szoveg_x, szoveg_y, "Lorem Ipsum")
         c = stdscr.getch()
         # exit program
-        if c == ord('q'):
+        if c == ord('q') or c == ord('Q'):
             if args.log: lf.write(logf('q'))
             break  # Exit the while()
 
@@ -193,6 +232,14 @@ try:
         elif c == curses.KEY_DOWN:
             if args.log: lf.write(logf("DOWN"))
             currentlySelected = selection_handler(currentlySelected+1, maxindex)
+
+        # karakterlap
+        elif c == ord('c') or c == ord('C'):
+            if args.log: lf.write(logf("c"))
+            aktiv_karakterlap = not aktiv_karakterlap
+
+
+
             
 except: # closes the functions properly in case of error
     curses.nocbreak()
