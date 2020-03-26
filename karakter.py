@@ -20,3 +20,6 @@ class Karakter:
             self.eletero = self.max_eletero
         else:
             self.eletero = uj_eletero
+    class Ork(Karakter):
+    class Ember(Karakter):
+    class Elf(Karakter):
