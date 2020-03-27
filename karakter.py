@@ -26,6 +26,19 @@ class Karakter:
             self.eletero = self.max_eletero
         else:
             self.eletero = uj_eletero
+            
+    class Ork(Karakter):
+        def spec(self):
+            print("Rothado belgazaidat kieresztetted, fujh")
+            
+    class Ember(Karakter):
+        def spec(self):
+            print("Ember vagyok, mi kell ennel tobb?!"
+            
+    class Elf(Karakter):
+        def spec(self):
+            print("Csodas enekhangodat kieresztetted, a novenyek zoldebbek, a fak magasabbak lettek!")
+            
 
     def tulajdonsagok_feltoltese(self, alapertek=10):
         for tul in TULAJDONSAGOK:
