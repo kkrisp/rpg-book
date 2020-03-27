@@ -1,3 +1,4 @@
+import random
 
 
 TULAJDONSAGOK = ["ero", "ugyesseg", "gyorsasag", "intelligencia"]
@@ -23,6 +24,40 @@ class Karakter:
             self.eletero = self.max_eletero
         else:
             self.eletero = uj_eletero
+
+
+    def nevet_general(self, nevek_listaja, vezeteknevek_listaja=None):
+        random_szam = random.randint(0, len(nevek_listaja)-1)
+        self.nev = nevek_listaja[random_szam]
+
+
+
+class Ork(Karakter):
+    nevek = ["Rushgar", "Mork", "Ugluuk", "Ghrisna", "Mrzimor"]
+    def __init__(self):
+        super(Ork, self).__init__()
+        self.nevet_general(Ork.nevek)
+        self.leiras = "Egy ismeretlen, jellegtelen kulseju ork all veled szemben."
+    def spec(self):
+        print("Rothado belgazaidat kieresztetted, fujh")
+            
+class Ember(Karakter):
+    nevek = ["Darvados", "Brom", "Tom", "Edua", "Olo", "D'Louhy", "Pero"]
+    def __init__(self):
+        super(Ember, self).__init__()
+        self.nevet_general(Ember.nevek)
+        self.leiras = "Egy ismeretlen, jellegtelen kulseju ember all veled szemben."
+    def spec(self):
+        print("Ember vagyok, mi kell ennel tobb?!")
+            
+class Elf(Karakter):
+    nevek = ["Nebelvir", "Fiumiel", "Z'Elenach", "Undomiel", "Syr"]
+    def __init__(self):
+        super(Elf, self).__init__()
+        self.nevet_general(Elf.nevek)
+        self.leiras = "Egy ismeretlen, jellegtelen kulseju elf all veled szemben."
+    def spec(self):
+        print("Csodas enekhangodat kieresztetted, a novenyek zoldebbek, a fak magasabbak lettek!")
 
 
 class Targy:
