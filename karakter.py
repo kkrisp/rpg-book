@@ -1,13 +1,16 @@
 
-
 TULAJDONSAGOK = ["ero", "ugyesseg", "gyorsasag", "intelligencia"]
 
 
 class Karakter:
     def __init__(self):
+        self.nev = "Nevtelen Karakter"
+        self.leiras = "Egy ismeretlen, jellegtelen kulseju szemely all veled szemben."
         self.targyak = []
+        self.tulajdonsagok = {}
         self.max_eletero = 100
         self.eletero = 100
+        self.tulajdonsagok_feltoltese(10)
 
     def van_e_nala(self, targy_neve):
         for targy in self.targyak:
@@ -24,6 +27,9 @@ class Karakter:
         else:
             self.eletero = uj_eletero
 
+    def tulajdonsagok_feltoltese(self, alapertek=10):
+        for tul in TULAJDONSAGOK:
+            self.tulajdonsagok[tul] = alapertek
 
 class Targy:
     def __init__(self):
