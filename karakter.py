@@ -28,74 +28,47 @@ class Karakter:
         else:
             self.eletero = uj_eletero
 
-
-    def nevet_general(self, nevek_listaja, vezeteknevek_listaja=None):
-        random_szam = random.randint(0, len(nevek_listaja)-1)
-        self.nev = nevek_listaja[random_szam]
-
-
-
-class Ork(Karakter):
-    nevek = ["Rushgar", "Mork", "Ugluuk", "Ghrisna", "Mrzimor"]
-    def __init__(self):
-        super(Ork, self).__init__()
-        self.nevet_general(Ork.nevek)
-        self.leiras = "Egy ismeretlen, jellegtelen kulseju ork all veled szemben."
-    def spec(self):
-        print("Rothado belgazaidat kieresztetted, fujh")
-            
-class Ember(Karakter):
-    nevek = ["Darvados", "Brom", "Tom", "Edua", "Olo", "D'Louhy", "Pero"]
-    def __init__(self):
-        super(Ember, self).__init__()
-        self.nevet_general(Ember.nevek)
-        self.leiras = "Egy ismeretlen, jellegtelen kulseju ember all veled szemben."
-    def spec(self):
-        print("Ember vagyok, mi kell ennel tobb?!")
-            
-class Elf(Karakter):
-    nevek = ["Nebelvir", "Fiumiel", "Z'Elenach", "Undomiel", "Syr"]
-    def __init__(self):
-        super(Elf, self).__init__()
-        self.nevet_general(Elf.nevek)
-        self.leiras = "Egy ismeretlen, jellegtelen kulseju elf all veled szemben."
-    def spec(self):
-        print("Csodas enekhangodat kieresztetted, a novenyek zoldebbek, a fak magasabbak lettek!")
-
     def tulajdonsagok_feltoltese(self, alapertek=10):
         for tul in TULAJDONSAGOK:
             self.tulajdonsagok[tul] = alapertek
 
     def nevet_general(self, nevek_listaja, vezeteknevek_listaja=None):
-        random_szam = random.randint(0, len(nevek_listaja)-1)
+        random_szam = random.randint(0, len(nevek_listaja) - 1)
         self.nev = nevek_listaja[random_szam]
-
 
 
 class Ork(Karakter):
     nevek = ["Rushgar", "Mork", "Ugluuk", "Ghrisna", "Mrzimor"]
+
     def __init__(self):
         super(Ork, self).__init__()
         self.nevet_general(Ork.nevek)
         self.leiras = "Egy ismeretlen, jellegtelen kulseju ork all veled szemben."
+
     def spec(self):
         print("Rothado belgazaidat kieresztetted, fujh")
-            
+
+
 class Ember(Karakter):
     nevek = ["Darvados", "Brom", "Tom", "Edua", "Olo", "D'Louhy", "Pero"]
+
     def __init__(self):
         super(Ember, self).__init__()
         self.nevet_general(Ember.nevek)
         self.leiras = "Egy ismeretlen, jellegtelen kulseju ember all veled szemben."
+
     def spec(self):
         print("Ember vagyok, mi kell ennel tobb?!")
-            
+
+
 class Elf(Karakter):
     nevek = ["Nebelvir", "Fiumiel", "Z'Elenach", "Undomiel", "Syr"]
+
     def __init__(self):
         super(Elf, self).__init__()
         self.nevet_general(Elf.nevek)
         self.leiras = "Egy ismeretlen, jellegtelen kulseju elf all veled szemben."
+
     def spec(self):
         print("Csodas enekhangodat kieresztetted, a novenyek zoldebbek, a fak magasabbak lettek!")
 
@@ -106,7 +79,7 @@ class Targy:
         # a bonususzokat es a felteteleket egy dictionary tarolja
         # {tulajdonsag_1 : bonusz_merteke, tulajodonsag_2 : bonusz_merteke}
         self.feltetelek = {}  # ures dict
-        self.bonuszok = {}    # ures dict
+        self.bonuszok = {}  # ures dict
 
     def uj_bonusz(self, tulajdonsag, bonusz):
         '''Uj bonuszt ad a targyhoz. '''
@@ -128,11 +101,11 @@ class Targy:
         '''Egy karakter tulajdonsaglistajat varja parameterkent, es visszaadja,
         hogy a targy hasznalhato-e az adott kepessegekkel.'''
         hasznalhato = True
-        for tul in TULAJDONSAGOK:               # vegigmegy a lehetseges tulajdonsagokon
-            if tul in self.feltetelek.keys():   # ha ez nincs a feltetelek kozott, megy a kovatkezore...
-                                                #       ... igy, ha a targynak nincs feltetele azonnal hasznalhato
+        for tul in TULAJDONSAGOK:  # vegigmegy a lehetseges tulajdonsagokon
+            if tul in self.feltetelek.keys():  # ha ez nincs a feltetelek kozott, megy a kovatkezore...
+                #       ... igy, ha a targynak nincs feltetele azonnal hasznalhato
                 if karakter_tulajdonsagok[tul] < self.feltetelek[tul]:  # ha kisebb a karakter tul.-a mint a feltetel
-                    hasznalhato = False         # a hasznalhatosag hamis lesz
+                    hasznalhato = False  # a hasznalhatosag hamis lesz
         return hasznalhato
 
     def bonusz(self, karakter_tulajdonsag):
