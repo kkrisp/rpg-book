@@ -8,6 +8,7 @@ import argparse
 import curses # for visual commands
 #import getch
 import karakter as kar
+import konyv as konyv_kalandokhoz
 
 # arguments
 argParser = argparse.ArgumentParser(description="Kaland es kockazat!")
@@ -21,6 +22,18 @@ buttons = [
     "SAVE GCODE"
 ]
 
+valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
+
+def sorokra_bont(szoveg):
+    sor = ""
+    bontott = []
+    for k in szoveg:
+        if k == "\n":
+            bontott.append(sor)
+            sor = ""
+        else:
+            sor += k
+    return bontott
 
 def hatteret_feltolt(fajlnev, hatter):
     hatter_fajl = open(fajlnev, 'r')
@@ -186,6 +199,13 @@ def karakterlapot_rajzol(kepernyo, karakter_in, x_pos=0, y_pos=0):
         kepernyo.addstr(x_pos+sorszam, y_pos, "  " + targy)
         sorszam += 1
 
+def valasztasokat_kiir(kepernyo, valasz_lista, x0, y0):
+    cnt = 0
+    for val in valasz_lista:
+        ki = valasz_betuk[cnt] + ") " + val.szoveg
+        stdscr.addstr(x0 + cnt, y0, ki)
+        cnt += 1
+
 foszereplo = kar.Karakter()
 foszereplo.nev = "Veer Istvan"
 foszereplo.targyak.append("Alma")
@@ -204,21 +224,27 @@ stdscr.keypad(1)          # arrowkeys, etc are registered too
 maxx, maxy = stdscr.getmaxyx()  # get size of the screen
 curses.curs_set(0)              # set cursor out of the screen
 
-welcome_text = "Valaszthato kalandok:"
-#available_adventures = get_adventure_titles()
+k = konyv_kalandokhoz.Konyv()
+konyv_kalandokhoz.beolvas("Troll_a_hidon.md", k)
+kepernyore = ""  # a szoveg, amit az addstr paranccsal kinyomtatunk
+nagy_szoveg = []
+valaszlista = []  # valaszok listaja nyomtatashoz
+valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
+jelenlegi_oldalszam = 1
+
 currentlySelected = 0
-#maxindex = len(available_adventures)
 szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
 aktiv_karakterlap = False
 try:
     while 1:
+        osz = jelenlegi_oldalszam-1  # a termeszetes oldalszamozas miatt... igy mar tombindex
+        nagy_szoveg = sorokra_bont(k.oldalak[osz].szoveg)
         hatter_rajzolasa_kozepre(stdscr, egyszeru_hatter)
         if aktiv_karakterlap:
             karakterlapot_rajzol(stdscr, foszereplo, szoveg_x, szoveg_y)
         else:
-            #stdscr.addstr(int(maxx/4), int(maxy/2-len(welcome_text)/2), welcome_text)
-            #draw_list(stdscr, int(maxx/4+1), int(maxy/2-len(welcome_text)/2), available_adventures, currentlySelected)
-            stdscr.addstr(szoveg_x, szoveg_y, "Lorem Ipsum")
+            hatter_rajzolasa(stdscr, nagy_szoveg, szoveg_x, szoveg_y)
+            valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y)
         c = stdscr.getch()
         # exit program
         if c == ord('q') or c == ord('Q'):
@@ -227,11 +253,13 @@ try:
 
         # navigating the menu
         elif c == curses.KEY_UP:
-            if args.log: lf.write(logf("UP"))
             currentlySelected = selection_handler(currentlySelected-1, maxindex)
         elif c == curses.KEY_DOWN:
-            if args.log: lf.write(logf("DOWN"))
             currentlySelected = selection_handler(currentlySelected+1, maxindex)
+        elif c == curses.KEY_LEFT:
+            jelenlegi_oldalszam -= 1
+        elif c == curses.KEY_RIGHT:
+            jelenlegi_oldalszam += 1
 
         # karakterlap
         elif c == ord('c') or c == ord('C'):
@@ -257,6 +285,7 @@ curses.echo()
 curses.endwin()
 sys.exit()
 
+# ez itt lent csak peldak ezkoztara
 try:
     while False:
         maxindex = 16 + lb + len(myPositions)+1

@@ -1,3 +1,164 @@
+# read mode
+#  0 - nincs
+#  1 - kaland cim
+#  2 - fejezet cim
+#  3 - oldalszam/cim
+#  4 - oldal szoveg
+#  5 - valasz kriterium
+#  6 - valasz szoveg
+#  7 - valasz celoldal
+
+def takarit(szovegsor):
+    utolso_karakter = szovegsor[-1:]
+    while utolso_karakter == "\n":
+        szovegsor = szovegsor[:-1]
+        utolso_karakter = szovegsor[-1:]
+    return szovegsor
+
+
+
+def beolvas(faljnev, konyv):
+    f = open(faljnev, 'r')
+    k_elozo = "0"
+    k = "0"
+    maxpage = 100
+    read_mode = 0
+    kaland_cim = ""
+    oldalszam = ""
+    oldal_szoveg = ""
+    valasz_szoveg = ""
+    ide_vezet = ""
+    feltetel = ""
+    feltetelek = []
+    while k:
+        k_elozo = k
+        k = f.read(1)
+
+        if k == "#":
+            if read_mode == 4:
+                oldal_szoveg = takarit(oldal_szoveg)
+                konyv.oldalak[int(oldalszam) - 1].szoveg = oldal_szoveg
+            oldalszam = ""
+            if k_elozo == "#":
+                read_mode += 1
+                continue
+            else:
+                read_mode = 1
+                continue
+
+        elif k == ">":
+            konyv.oldalak[int(oldalszam) - 1].szoveg = oldal_szoveg
+            feltetelek = []
+            feltetel = ""
+            k = f.read(1)  # space
+            k = f.read(1)  # *
+            k = f.read(1)  # space
+            k = f.read(1)  # [ or text
+            if k == "[":
+                read_mode = 5
+            else:
+                valasz_szoveg += k
+                read_mode = 6
+        elif k == "[":
+            if read_mode == 4:
+                read_mode = 5
+            elif read_mode == 6:
+                read_mode = 7
+
+        elif read_mode == 1:
+            if k_elozo == "#":
+                k = f.read(1)
+                if k == " ":
+                    continue
+                else:
+                    kaland_cim += k
+                    continue
+            # kaland cim - majd kesobb
+            if k == "\n":
+                continue
+            else:
+                kaland_cim += k
+                continue
+
+        elif read_mode == 2:
+            # fejezet cim - majd kesobb
+            continue
+
+        elif read_mode == 3:
+            # oldalszam
+            if k.isdigit():
+                oldalszam += k
+            elif k == "\n":
+                if int(oldalszam) > maxpage:
+                    break
+                oldal_szoveg = ""
+                konyv.kibovit(int(oldalszam)-1)
+                read_mode = 4
+
+        elif read_mode == 4:
+            # oldal szoveg
+            if k == ">":
+                konyv.oldalak[int(oldalszam) - 1].szoveg = oldal_szoveg
+                oldal_szoveg = ""
+                k = f.read(1)  # space
+                k = f.read(1)  # *
+                k = f.read(1)  # space
+                k = f.read(1)  # [ or text
+                if k == "[":
+                    read_mode = 5
+                else:
+                    valasz_szoveg += k
+                    read_mode = 6
+
+            else:
+                oldal_szoveg += k
+
+        elif read_mode == 5:
+            # kitetelek
+            if k == "[":
+                continue
+            elif k == "]":
+                if len(feltetel) > 0:
+                    feltetelek.append(feltetel)
+                read_mode += 1
+                k = f.read(1)  # space olvasasa
+                continue
+            elif k == ",":
+                feltetelek.append(feltetel)
+                feltetel = ""
+                continue
+            else:
+                feltetel += k
+
+        elif read_mode == 6:
+            # valasz szoveg
+            if k == "[":
+                read_mode = 7
+                continue
+            else:
+                valasz_szoveg += k
+                continue
+
+        elif read_mode == 7:
+            # celoldal, ahova a valasz vezet
+            if k == " ":
+                continue
+            elif k == "]":
+                read_mode = 8
+                continue
+            elif k.isdigit():
+                ide_vezet += k
+
+        elif read_mode == 8:
+            if ide_vezet == "":
+                ide_vezet = "0"
+            konyv.oldalak[int(oldalszam)-1].valasz_hozzaadasa(valasz_szoveg, int(ide_vezet), feltetelek)
+            valasz_szoveg = ""
+            ide_vezet = ""
+            feltetelek = []
+            read_mode = 1
+    f.close()
+
 class Valasz:
     def __init__(self, szoveg="<ures valasz>", celoldal=0):
         self.szoveg = szoveg
@@ -14,9 +175,9 @@ class Valasz:
         else:
             for fel in feltetel:
                 if fel[0] == '-':
-                    self.feltetel_ha_nincs.append(feltetel[1:])
+                    self.feltetel_ha_nincs.append(fel[1:])
                 else:
-                    self.feltetel_ha_van.append(feltetel)
+                    self.feltetel_ha_van.append(fel)
 
     def teljesul(self, feltetel=None):
         if feltetel in self.feltetel_ha_van:
@@ -46,7 +207,7 @@ class Oldal:
         self.valaszok = []
 
     def valasz_hozzaadasa(self, valasz, ide_vezet, feltetelek):
-        self.valaszok.append(Valasz(valasz), ide_vezet)
+        self.valaszok.append(Valasz(valasz, ide_vezet))
         self.valaszok[len(self.valaszok)-1].felteteleket_hozzaad(feltetelek)
 
 class Konyv:
@@ -55,9 +216,11 @@ class Konyv:
 
     def kibovit(self, oldalszam):
         while oldalszam >= len(self.oldalak):
-            self.oldalak.append(Oldal)
+            self.oldalak.append(Oldal())
 
     def oldal_hozzaadd(self, oldalszam, szoveg):
+        self.kibovit(oldalszam)
+        self.oldalak[oldalszam].szoveg = szoveg
 
     def feltolt_faljbol(self, faljnev):
         oldalt_olvas = False
