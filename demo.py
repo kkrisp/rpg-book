@@ -211,6 +211,8 @@ foszereplo.targyak.append("Kotel")
 egyszeru_hatter = []
 hatteret_feltolt("jelenet_hatter.txt", egyszeru_hatter)
 
+debug_mode = True
+
 # itt kezdodik a curses ablak
 stdscr = curses.initscr() # returns a window object
 curses.noecho()           # turns off automatic echoing keys to the screen
@@ -225,7 +227,6 @@ konyv_kalandokhoz.beolvas("Troll_a_hidon.md", k)
 kepernyore = ""  # a szoveg, amit az addstr paranccsal kinyomtatunk
 nagy_szoveg = []
 valaszlista = []  # valaszok listaja nyomtatashoz
-valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
 jelenlegi_oldalszam = 1
 jelenlegi_valasz = 1
 
@@ -234,6 +235,9 @@ szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
 aktiv_karakterlap = False
 try:
     while 1:
+        # megjeleno elemek
+        for i in range(20):
+            stdscr.addstr(i, 0, " "*100)
         osz = jelenlegi_oldalszam-1  # a termeszetes oldalszamozas miatt... igy mar tombindex
         nagy_szoveg = sorokra_bont(k.oldalak[osz].szoveg)
         hatter_rajzolasa_kozepre(stdscr, egyszeru_hatter)
@@ -242,6 +246,33 @@ try:
         else:
             szoveget_kiir(stdscr, k.oldalak[osz].szoveg, szoveg_x, szoveg_y)
             valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y, jelenlegi_valasz)
+        if debug_mode:
+            l_i = 1
+            debug_text = "oldal: " + str(jelenlegi_oldalszam)
+            stdscr.addstr(l_i, 2, debug_text)
+            l_i += 1
+            debug_text = "valasz: " + str(jelenlegi_valasz)
+            stdscr.addstr(l_i, 2, debug_text)
+            l_i -= 1
+            debug_text = "a jelenlegi valasz:"
+            stdscr.addstr(l_i, 20, debug_text)
+            if len(k.oldalak[osz].valaszok) < 1:
+                l_i += 1
+                debug_text = "   ezen az oldalon nincsenek valaszlehetosegek"
+                stdscr.addstr(l_i, 20, debug_text)
+            else:
+                l_i += 1
+                debug_text = "   ide vezet: " + str(k.oldalak[osz].valaszok[jelenlegi_valasz-1].celoldal)
+                stdscr.addstr(l_i, 20, debug_text)
+                l_i += 1
+                debug_text = "   lathato, ha van: " + str(k.oldalak[osz].valaszok[jelenlegi_valasz-1].feltetel_ha_van)
+                stdscr.addstr(l_i, 20, debug_text)
+                l_i += 1
+                debug_text = "   lathato, ha nincs: " + str(k.oldalak[osz].valaszok[jelenlegi_valasz-1].feltetel_ha_nincs)
+                stdscr.addstr(l_i, 20, debug_text)
+                l_i += 1
+
+        # akciok kiadasa
         c = stdscr.getch()
         # exit program
         if c == ord('q') or c == ord('Q'):
@@ -253,13 +284,14 @@ try:
         elif c == curses.KEY_DOWN:
             jelenlegi_valasz = ertekvaltoztato(jelenlegi_valasz, +1, len(k.oldalak[osz].valaszok))
         elif c == curses.KEY_LEFT:
-            jelenlegi_oldalszam -= 1
+            jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, -1, len(k.oldalak))
             jelenlegi_valasz = 1
         elif c == curses.KEY_RIGHT:
-            jelenlegi_oldalszam += 1
+            jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, +1, len(k.oldalak))
             jelenlegi_valasz = 1
         elif c == ord('\n'):
             jelenlegi_oldalszam = k.oldalak[osz].valaszok[jelenlegi_valasz-1].celoldal
+            jelenlegi_valasz = 1
 
         # karakterlap
         elif c == ord('c') or c == ord('C'):
