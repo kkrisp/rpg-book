@@ -24,6 +24,16 @@ buttons = [
 
 valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
 
+def szoveget_kiir(kepernyo, x0, y0, szoveg, maxhossz):
+    cnt = 0
+    hossz = 1
+    for betu in szoveg:
+        if betu == "\n":
+            kepernyo.addstr(x0+cnt, y0, sor)
+            cnt += 1
+        else:
+
+
 def sorokra_bont(szoveg):
     sor = ""
     bontott = []
@@ -116,58 +126,13 @@ def selection_handler(nextIndex, listLength):
     if nextIndex >= 0: return nextIndex % listLength
     else: return listLength+nextIndex # if the index goes negative
 
-def value_changer(value, changeBy):
-    """Inverts booleans, does not allow ints and floats be smaller than 0"""
-    if type(value) is bool: return not value
-    
-    #'changeBy' is usually 1 or -1, floats are altered in smaller steps
-    elif type(value) is int:
-        if (value+changeBy) > 0 : return value + changeBy
-        else: return 0
-    else:
-        changeBy = changeBy*0.1
-        if (value+changeBy) > 0.0 : return value + changeBy
-        else: return 0.0
-
-def position_submenu(screen, x0, y0):
-    screen.addstr(x0, y0,   "+-----------------------------+")
-    screen.addstr(x0+1, y0, "| +-------------------------+ |")
-    screen.addstr(x0+2, y0, "| |   GO   | RESET | CANCEL | |")
-    screen.addstr(x0+3, y0, "| |  (g)   |  (r)  |  (c)   | |")
-    screen.addstr(x0+4, y0, "| +-------------------------+ |")
-    screen.addstr(x0+5, y0, "+-----------------------------+")
-    while 1:
-        c = screen.getch()
-        if c == ord('g'):
-            return 1
-        elif c == ord('r'):
-            return 2
-        else:
-            return 0
-
-def value_from_user(screen, x0, y0, maxLength):
-    """Gets a string from the user. Generates a 'write there' field
-    at the given place with the length of the maximum available input length."""
-    curses.echo()
-    screen.addstr(x0, y0, ("_"*(maxLength+1)))
-    s = screen.getstr(x0, y0+1, maxLength)
-    curses.noecho()
-    return s
-
-def get_adventure_titles():
-    title_list = []
-    for file in os.listdir("./"):
-        if file.split('.')[1] == "adv":
-            title = ""
-            for line in open(file, 'r'):
-                words = line.split(' ')
-                if words[0] == "TITLE":
-                    for w in range(1, len(words)-1):
-                        title += words[w] + " "
-                    title += words[len(words)-1].split("\n")[0]
-                    break
-            title_list.append(title)
-    return title_list
+def ertekvaltoztato(ertek, valtoztatas, maxertek):
+    kimeno_ertek = ertek + valtoztatas
+    if kimeno_ertek > maxertek:
+        kimeno_ertek = 0+valtoztatas
+    elif kimeno_ertek < 1:
+        kimeno_ertek = maxertek + valtoztatas + 1
+    return kimeno_ertek
 
 
 def karakterlapot_rajzol(kepernyo, karakter_in, x_pos=0, y_pos=0):
@@ -199,12 +164,34 @@ def karakterlapot_rajzol(kepernyo, karakter_in, x_pos=0, y_pos=0):
         kepernyo.addstr(x_pos+sorszam, y_pos, "  " + targy)
         sorszam += 1
 
-def valasztasokat_kiir(kepernyo, valasz_lista, x0, y0):
+
+def valasztasokat_kiir(kepernyo, valasz_lista, x0, y0, valasztott=1, szelesseg = 80):
     cnt = 0
+    kijeloles = 1
     for val in valasz_lista:
-        ki = valasz_betuk[cnt] + ") " + val.szoveg
-        stdscr.addstr(x0 + cnt, y0, ki)
+        ki = valasz_betuk[cnt] + ") "
+        n = 0
+        for betu in val.szoveg:
+            n += 1
+            if betu == "\n" or n >= szelesseg:
+                if betu != "\n":
+                    ki += betu
+                if kijeloles == valasztott:
+                    kepernyo.addstr(x0 + cnt, y0, ki, curses.A_REVERSE)
+                else:
+                    kepernyo.addstr(x0 + cnt, y0, ki)
+                ki = "   "
+                cnt += 1
+                n = 0
+            else:
+                ki += betu
+        if kijeloles == valasztott:
+            kepernyo.addstr(x0 + cnt, y0, ki, curses.A_REVERSE)
+        else:
+            kepernyo.addstr(x0 + cnt, y0, ki)
         cnt += 1
+        kijeloles += 1
+
 
 foszereplo = kar.Karakter()
 foszereplo.nev = "Veer Istvan"
@@ -231,6 +218,7 @@ nagy_szoveg = []
 valaszlista = []  # valaszok listaja nyomtatashoz
 valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
 jelenlegi_oldalszam = 1
+jelenlegi_valasz = 1
 
 currentlySelected = 0
 szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
@@ -244,31 +232,31 @@ try:
             karakterlapot_rajzol(stdscr, foszereplo, szoveg_x, szoveg_y)
         else:
             hatter_rajzolasa(stdscr, nagy_szoveg, szoveg_x, szoveg_y)
-            valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y)
+            valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y, jelenlegi_valasz)
         c = stdscr.getch()
         # exit program
         if c == ord('q') or c == ord('Q'):
-            if args.log: lf.write(logf('q'))
             break  # Exit the while()
 
         # navigating the menu
         elif c == curses.KEY_UP:
-            currentlySelected = selection_handler(currentlySelected-1, maxindex)
+            jelenlegi_valasz = ertekvaltoztato(jelenlegi_valasz, -1, len(k.oldalak[osz].valaszok))
         elif c == curses.KEY_DOWN:
-            currentlySelected = selection_handler(currentlySelected+1, maxindex)
+            jelenlegi_valasz = ertekvaltoztato(jelenlegi_valasz, +1, len(k.oldalak[osz].valaszok))
         elif c == curses.KEY_LEFT:
             jelenlegi_oldalszam -= 1
+            jelenlegi_valasz = 1
         elif c == curses.KEY_RIGHT:
             jelenlegi_oldalszam += 1
+            jelenlegi_valasz = 1
+        elif c == ord('\n'):
+            jelenlegi_oldalszam = k.oldalak[osz].valaszok[jelenlegi_valasz-1].celoldal
 
         # karakterlap
         elif c == ord('c') or c == ord('C'):
-            if args.log: lf.write(logf("c"))
             aktiv_karakterlap = not aktiv_karakterlap
 
 
-
-            
 except: # closes the functions properly in case of error
     curses.nocbreak()
     stdscr.keypad(0)

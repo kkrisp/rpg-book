@@ -12,9 +12,8 @@ A troll osszhuzza a szemeit es megszolal:
  Jobban teszed hat, ha elteszed azt a fogpiszkalot!
  > * Elteszem a kardomat [3.oldal]
  > * Kivont karddal, neman allok tovabb [4.oldal]
- > * Kivont karddal azt kialtom neki: Latom a beszed jobban megy 
-  mint a harc. Pedig azt hittem ma kivetelesen egy bator trollt olok meg! [5.oldal]
-
+ > * Kivont karddal azt kialtom neki: Latom a beszed jobban megy mint
+a harc. Pedig azt hittem ma kivetelesen egy bator trollt olok meg! [5.oldal]
 
 ### 3. Oldal
 - Ide hallgass te utazo - mondja a troll - En Tulok vagyok a troll
@@ -41,8 +40,7 @@ A troll elmosolyodik, es belefog a kerdesbe:
 
 ### 7.oldal x
 - Rendben - mondja a troll, ide azzal a csirkevel!
-A troll elveszi a csirket es megeszi. Kozben elkapja
-a labad es megesz teged is! Vesztettel!
+A troll elveszi a csirket es megeszi. Kozben elkapja a labad es megesz teged is! Vesztettel!
 
 ### 8.oldal x
 A troll lecsap a bunkojaval... Vesztettel!
