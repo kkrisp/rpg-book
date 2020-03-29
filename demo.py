@@ -24,14 +24,23 @@ buttons = [
 
 valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
 
-def szoveget_kiir(kepernyo, x0, y0, szoveg, maxhossz):
-    cnt = 0
-    hossz = 1
+
+def szoveget_kiir(kepernyo, szoveg, x0, y0, maxhossz=80):
+    sorszam = 0
+    l_hossz = 0
+    kiirando = ""
     for betu in szoveg:
-        if betu == "\n":
-            kepernyo.addstr(x0+cnt, y0, sor)
-            cnt += 1
+        if betu == "\n" or l_hossz > maxhossz:
+            if betu != "\n":
+                kiirando += betu
+            kepernyo.addstr(x0+sorszam, y0, kiirando)
+            kiirando = ""
+            l_hossz = 0
+            sorszam += 1
         else:
+            kiirando += betu
+        l_hossz += 1
+    kepernyo.addstr(x0+sorszam, y0, kiirando)
 
 
 def sorokra_bont(szoveg):
@@ -231,7 +240,7 @@ try:
         if aktiv_karakterlap:
             karakterlapot_rajzol(stdscr, foszereplo, szoveg_x, szoveg_y)
         else:
-            hatter_rajzolasa(stdscr, nagy_szoveg, szoveg_x, szoveg_y)
+            szoveget_kiir(stdscr, k.oldalak[osz].szoveg, szoveg_x, szoveg_y)
             valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y, jelenlegi_valasz)
         c = stdscr.getch()
         # exit program
