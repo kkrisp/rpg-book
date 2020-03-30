@@ -146,7 +146,7 @@ def beolvas(faljnev, konyv):
             elif k == "]":
                 read_mode = 8
                 continue
-            elif k.isdigit():
+            elif k.isdigit() or k == "-":
                 ide_vezet += k
 
         elif read_mode == 8:

@@ -12,10 +12,14 @@ import konyv as konyv_kalandokhoz
 
 # arguments
 argParser = argparse.ArgumentParser(description="Kaland es kockazat!")
-argParser.add_argument('--log', "-l",
+argParser.add_argument("-l", "--log",
                         action="store_true",
                         default=False,
-                        help='Does nothing yet.')
+                        help='Megjegyzi a karakter valasztasait. (ez a funkcio meg nem mukodik)')
+argParser.add_argument("-d", "--developer",
+                        action="store_true",
+                        default=False,
+                        help='Fejlesztoi mod: oldalak szabad valtasa, extra infok megjelenitese.')
 args = argParser.parse_args()
 buttons = [
     "PRINT GRID",
@@ -211,7 +215,7 @@ foszereplo.targyak.append("Kotel")
 egyszeru_hatter = []
 hatteret_feltolt("jelenet_hatter.txt", egyszeru_hatter)
 
-debug_mode = True
+debug_mode = args.developer
 
 # itt kezdodik a curses ablak
 stdscr = curses.initscr() # returns a window object
@@ -241,13 +245,21 @@ try:
         osz = jelenlegi_oldalszam-1  # a termeszetes oldalszamozas miatt... igy mar tombindex
         nagy_szoveg = sorokra_bont(k.oldalak[osz].szoveg)
         hatter_rajzolasa_kozepre(stdscr, egyszeru_hatter)
-        if aktiv_karakterlap:
+        if jelenlegi_oldalszam < 0:
+            stdscr.addstr(szoveg_x+6, szoveg_y+36, "A jateknak vege!")
+            stdscr.addstr(szoveg_x+8, szoveg_y+29, "A kilepeshez nyomj meg egy gombot!")
+            c = stdscr.getch()
+            break
+        elif aktiv_karakterlap:
             karakterlapot_rajzol(stdscr, foszereplo, szoveg_x, szoveg_y)
         else:
             szoveget_kiir(stdscr, k.oldalak[osz].szoveg, szoveg_x, szoveg_y)
             valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y, jelenlegi_valasz)
         if debug_mode:
             l_i = 1
+            debug_text = "[n]<<oldal>>[m]"
+            stdscr.addstr(l_i, 2, debug_text)
+            l_i += 1
             debug_text = "oldal: " + str(jelenlegi_oldalszam)
             stdscr.addstr(l_i, 2, debug_text)
             l_i += 1
@@ -284,11 +296,9 @@ try:
         elif c == curses.KEY_DOWN:
             jelenlegi_valasz = ertekvaltoztato(jelenlegi_valasz, +1, len(k.oldalak[osz].valaszok))
         elif c == curses.KEY_LEFT:
-            jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, -1, len(k.oldalak))
-            jelenlegi_valasz = 1
+            pass
         elif c == curses.KEY_RIGHT:
-            jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, +1, len(k.oldalak))
-            jelenlegi_valasz = 1
+            pass
         elif c == ord('\n'):
             jelenlegi_oldalszam = k.oldalak[osz].valaszok[jelenlegi_valasz-1].celoldal
             jelenlegi_valasz = 1
@@ -297,6 +307,13 @@ try:
         elif c == ord('c') or c == ord('C'):
             aktiv_karakterlap = not aktiv_karakterlap
 
+        elif debug_mode:
+            if c == ord('n') or c == ord('N'):
+                jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, -1, len(k.oldalak))
+                jelenlegi_valasz = 1
+            elif c == ord('m') or c == ord('M'):
+                jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, +1, len(k.oldalak))
+                jelenlegi_valasz = 1
 
 except: # closes the functions properly in case of error
     curses.nocbreak()

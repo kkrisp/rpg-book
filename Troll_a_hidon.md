@@ -35,17 +35,20 @@ A troll elmosolyodik, es belefog a kerdesbe:
 - Mi az, ejjel nappal mindig jar, holta utan szaladgal?
 > * [-intelligencia] Tojas! [8. oldal]
 > * Nem tudom! [8. oldal]
-> * Inkabb harcoljunk! [8.oldal]
+> * Inkabb harcoljunk! - mondom, es kivonom a kardomat. [2.oldal]
 > * Elszaladok! [9.oldal]
 
 ### 7.oldal x
 - Rendben - mondja a troll, ide azzal a csirkevel!
 A troll elveszi a csirket es megeszi. Kozben elkapja a labad es megesz teged is! Vesztettel!
+> * Te moho kocso... hamcs NYAMM HABZS!! [-1.oldal]
 
 ### 8.oldal x
 A troll lecsap a bunkojaval... Vesztettel!
+> * ... [-1.oldal]
 
 ### 9.oldal x
 Elszaladsz, de igy nem jutsz at a hidon... Vesztettel!
+> * Nem baj, ugy sem akartam kalandozo lenni! [-1.oldal]
 
 # End
