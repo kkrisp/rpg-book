@@ -1,4 +1,4 @@
-[ Hazibuli - csajozos szerepjatek
+# Hazibuli - csajozos szerepjatek
 
 ### 1.Oldal
 Péntek este van. Rákészültél az éjszakára. Zsoca, a legjobb haverod azt mondta, ma zsákolni fogtok. Mármint nem egymással, hanem nőkkel. Igaziakkal. Lélegzőkkel. Bár, ha az nem jönne össze, tőle akár ti ketten is… de ezt majd megbeszélitek később. Álljunk pozitívan a kérdéshez, mondta Zsoca, a legjobb haverod a világon. Felvetted a legnyálasabb garbód, amit anyutól kaptál karácsonyra, és kifényezted a makkos súzt, készen állsz, mi a faszt teszel, haver?
@@ -7,7 +7,7 @@ Péntek este van. Rákészültél az éjszakára. Zsoca, a legjobb haverod azt m
 
 ### 2. Oldal
 Tudom, nem úgy hangzik, de… GYŐZTÉL!! Egyel kevesebb csalódás, egyel kevesebb megaláztatás, és ha minden frankón sikerül, egyel kevesebb gáz barát, aki nem kis valószínűséggel látens homoszexuális. Ráadásul a felszedett gáré családjával sem kell megverekedned, ha nem akarod fizetni a gyerektartást, amikor két hónap múlva lefiall. Hosszú és eredményes életet!
-> * Gratula! [-1.oldal]
+> * Gratula! [-1.oldal] {}
 
 ### 3. Oldal
 Rossz döntés, de legyen. Várakozol, amíg Zsoca, a világ legjobb haverja megérkezik. A kipimpelt telefonjáról csörög rád, úgy visszhangzik, hogy legszívesebben kicsavarnád a kezéből az éteren át, és bebasznád vele a fejét, nade… jól tudod, hogy ő az egyetlen esélyed, hogy valaha is zsákolj. Te aztán tényleg nagy szarban vagy. Zsoca, a legjobb haverod leparkol a házatok előtt. Apád elhúzza a függönyt, hogy lássa, ki az a fasz, aki ilyen szar zenét bömböltet. Na?
@@ -56,7 +56,7 @@ Persze, hogy mindenki ezt választotta. Sajnos Piros csúnya, mint a bűn. Persz
 
 ### 12.oldal
 Amikor megkérdezed, nincs-e kedve hancúrozni egyet, annyira elkezd röhögni, hogy kiköpi a bloddy mary-jét, sőt a padlóra hemperedik, és majdnem meg is fullad, de te nem adsz neki mesterséges légzést, hanem hasbarúgod, ahogy eliramodol mellette, be az igazi nagyon kemény buliba.
-> * Scotty… ez valamiféle időörvény lehet! Miről beszél kapitány? Energiát!! [12.oldal]
+> * Scotty… ez valamiféle időörvény lehet! Miről beszél kapitány? Energiát!! [13.oldal]
 
 ### 13.oldal
 A nappaliban nagy az élet, megy a buli, valami erőgépről Megasound System nóták mennek sorban, a srácok kegyetlen kemény gettóreppernek érzik magukat mind, aztán lobogtatják a kezüket, mint a faágakat a szélben, vagy mi, a lányok meg nagyon élvezik a bulizásokat meg a zenéket, akkor is, ha mind szexista szövegvilágú, persze erről még semmit sem tudnak, még nem értek el az emancipálódás azon fokára, még csak jókat vihognak azon, hogy Dope-T hogyan erőlteti be a pajszert minden sunába, yo. Zsoca, a legjobb haverod Klári seggét csapkodja, aki viszonzásképpen folyamatosan lefingja, és nagyon jól elvannak, tele pofával röhögnek egymás képébe. Te Piroshoz mész oda, aki valamiért fájlalja a bordáit. Mi lészen?
@@ -72,8 +72,8 @@ Le se szarja. És be kell látnod, hogy igaza van. Ki a retket érdekel akárkin
 
 ### 15.oldal
 A masszírozás hallatán felcsillan a szeme, ő is szereti ha kényeztetik, mégha olyan csúnya is, mint egy kifordított segg. Viszont nem hajlandó szobára menni, azt mondja, meg tudod masszírozni itt is. Itt? Fog egy debreceni széket, és leül eléd. Félrelöki a zsíros haját a tarkójáról, hogy biztosan ne zavarjon, és várja, hogy hozzáláss. Nos?
-> * Hozzálátok. [-1.oldal]
-> * Amíg háttal van, elvegyülök a tömegben [-1.oldal]
+> * Hozzálátok. [16.oldal]
+> * Amíg háttal van, elvegyülök a tömegben [17.oldal]
 
 ### 16.oldal
 A masszírozás marha jó ötlet volt. Még csak két perce nyomogatod a ragacsos bőrét, de az undorodba már simán belevegyül az unalom is. Ráadául ő közben beszélgetni próbál. Szerencsére az üvöltő Megasound Systemtől nem nagyon hallasz semmit a dumájából, de már a tököd kivan azzal is, hogy azt hajtogatod: „Aha. Hm. Ja. Ühüm.” Ha gondolod, még megpattanhatsz…
@@ -106,13 +106,9 @@ A Polzsai Pityu keres. Kurva nagydarab lóbaszó állatkert. Ez a gyerek már na
 > * Vége, kiléphetsz... [-1.oldal]
 
 ### 22.oldal
-[23.oldal]
-a
-Zsákolok [-1.oldal]
-[24.oldal]
-b
-Magára hagyom ezekben a meghitt pillanatokban [-1.oldal]
 Ezerhat jött össze a zsebelésből. A surmók nem hoztak magukkal sok pénzt, tudták, hogy házibuli, ingyen pia, meg minden. Legszívesebben rájuk gyújtanád az egész kócerájt. És tényleg… miért ne? Kirohansz a konyhába, hogy gyufát keress. Az asztal alatt Balázst látod, aki alszik, és mintha egy banán lógna ki a szájából. Orsi a tűzhely előtt térdel, nagyon keres valamit, de nem találja. Megkérdezed, segíthetsz-e valamiben. Azt nyekergi, hogy szeretné a sütőbe dugni a fejét, csak előbb be kéne kapcsolni a gázt. Mellé guggolsz, és azon tűnődsz, vajon mi késztethet egy ilyen fiatal, attraktív lányt az öngyilkosságra. Aztán segítesz neki megnyitni a gázt. Hálásan rád mosolyog, majd bedugja a fejét a sütőbe. És te?
+> * Zsákolok [23.oldal]
+> * Magára hagyom ezekben a meghitt pillanatokban [24.oldal]
 
 ### 23.oldal
 Ahogy ott térdel, fejével a sütőben, letéped róla a bugyit, és beakasztasz. Mozgolódik. Persze nem nagyon, csak amennyire a pia által még ki nem irtott ösztönei engedik. Mintha kicsit nyögdécselne is. Nem szeretnéd, ha lebuknál, milyen gáz már ez az egész, szóval belekönyökölsz a gerincébe. Most kicsit hangosabban nyög fel, de aztán kussban marad. Aztán elmúlik a mozgolódás is, ráadásul valami köcsög szagot érzel. Arra gondolsz, biztosan Orsi telehányta a sütőt. Még egy percig vidulsz azon, hogy holnap akár pizzára is lehet kenni a cuccost feltétnek, meg még egy percet vidulsz azon, hogy végre valóban zsákolsz, aztán szépen elalszol, ahogy a szivárgó gáz megfojt. Azért még érzed, ahogy beszarsz. VESZTETTÉL. A vulkáni flotta a saját halottjának tekint.
@@ -198,13 +194,12 @@ Azt mondja, a neve Kinga. Magadban halkan kuncogsz, hogy Finga, haha, de neki eg
 > * Megcsókolom [42.oldal]
 
 ### 37.oldal
-> * Gyorsan! [39.oldal]
 Nem hiszi el, az egyetlen esélyed, ha adsz neki valami ajándékot!
+> * Gyorsan! [39.oldal]
 
 ### 38.oldal
-
-> * Fuhh! [37.oldal]
 Nincs, azt kell hazudnod, hogy te is híres vagy
+> * Fuhh! [37.oldal]
 
 ### 39.oldal
 Csak egy levél Seduxent találsz a zsebedben. A szemébe nézel, és a legkedvesebb mosolyoddal, amit még mindig csak valami ótvar belterjes vigyorként lehet jellemezni, átnyújtod neki a gyógyszereket. Undorodva mér végig, és azt kérdezi, vodkád nincs hozzá?
@@ -216,7 +211,6 @@ Hát ez kurvára nem hatja meg, talán van kedve lerészegedni, mint a disznó
 > * Sutty! [38.oldal]
 
 ### 41.oldal
-Ha két percig meg tudsz maradni a drogos valagadon, akkor szerzek
 És? Akár el is teheted. Inkább nyálazd meg a szemöldököd
 > * Zipp! [40.oldal]
 
