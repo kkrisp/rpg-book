@@ -22,7 +22,7 @@ es csak azokat engedem at, akik megvalaszoljak egy kerdesemet!
 > * [sult_csirke] Nem lehetne inkabb, hogy megosztozunk ezen a sult csirken? [7.oldal]
 
 ### 4.Oldal
-A troll eloveszi a bunkosbotjat, es lassu leptekke indul feled.
+A troll eloveszi a bunkosbotjat, es lassu leptekkel indul feled.
 > * Megprobalok elszaladni. [9.oldal]
 > * Harcolok vele. [8.oldal]
 

@@ -234,6 +234,9 @@ valaszlista = []  # valaszok listaja nyomtatashoz
 jelenlegi_oldalszam = 1
 jelenlegi_valasz = 1
 
+c = ""
+c_elozo = ""
+
 currentlySelected = 0
 szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
 aktiv_karakterlap = False
