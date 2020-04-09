@@ -227,7 +227,7 @@ maxx, maxy = stdscr.getmaxyx()  # get size of the screen
 curses.curs_set(0)              # set cursor out of the screen
 
 k = konyv_kalandokhoz.Konyv()
-konyv_kalandokhoz.beolvas("Troll_a_hidon.md", k)
+konyv_kalandokhoz.beolvas("BekeX_csajozos.md", k)
 kepernyore = ""  # a szoveg, amit az addstr paranccsal kinyomtatunk
 nagy_szoveg = []
 valaszlista = []  # valaszok listaja nyomtatashoz
