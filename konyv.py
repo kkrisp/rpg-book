@@ -8,13 +8,13 @@
 #  6 - valasz szoveg
 #  7 - valasz celoldal
 
+
 def takarit(szovegsor):
     utolso_karakter = szovegsor[-1:]
     while utolso_karakter == "\n":
         szovegsor = szovegsor[:-1]
         utolso_karakter = szovegsor[-1:]
     return szovegsor
-
 
 
 def beolvas(faljnev, konyv):
@@ -30,6 +30,8 @@ def beolvas(faljnev, konyv):
     ide_vezet = ""
     feltetel = ""
     feltetelek = []
+    jutalom = ""
+    jutalmak = []
     while k:
         k_elozo = k
         k = f.read(1)
@@ -46,7 +48,7 @@ def beolvas(faljnev, konyv):
                 read_mode = 1
                 continue
 
-        elif k == ">":
+        elif k == ">":  # valasz beolvasasanak kezdete
             konyv.oldalak[int(oldalszam) - 1].szoveg = oldal_szoveg
             feltetelek = []
             feltetel = ""
@@ -59,13 +61,16 @@ def beolvas(faljnev, konyv):
             else:
                 valasz_szoveg += k
                 read_mode = 6
+
         elif k == "[":
             if read_mode == 4:
                 read_mode = 5
             elif read_mode == 6:
-                read_mode = 7
+                read_mode = 8
+        elif k == "{":
+            read_mode = 7
 
-        elif read_mode == 1:
+        elif read_mode == 1:  # kaland cimenek beolvasasa
             if k_elozo == "#":
                 k = f.read(1)
                 if k == " ":
@@ -81,10 +86,10 @@ def beolvas(faljnev, konyv):
                 continue
 
         elif read_mode == 2:
-            # fejezet cim - majd kesobb
+            # fejezet cim beolvasasa- majd kesobb
             continue
 
-        elif read_mode == 3:
+        elif read_mode == 3:  # oldal szamanak beolvasasa
             # oldalszam
             if k.isdigit():
                 oldalszam += k
@@ -95,27 +100,29 @@ def beolvas(faljnev, konyv):
                 konyv.kibovit(int(oldalszam)-1)
                 read_mode = 4
 
-        elif read_mode == 4:
-            # oldal szoveg
-            if k == ">":
+        elif read_mode == 4:  # oldal szovegenek beolvasasa
+            if k == ">":  # ha mar a valaszokhoz ert, adja hozza a szoveget az oldalhoz, es folytassa a valaszokkal
                 konyv.oldalak[int(oldalszam) - 1].szoveg = oldal_szoveg
                 oldal_szoveg = ""
+                # beolvassuk az elso 3 karaktert, ami biztos, hogy " * "
                 k = f.read(1)  # space
                 k = f.read(1)  # *
                 k = f.read(1)  # space
-                k = f.read(1)  # [ or text
+                # ha a 4. karakter a sorban [-val kezdodik: feltetel, ha betu: mar a szoveg
+                k = f.read(1)
                 if k == "[":
-                    read_mode = 5
+                    read_mode = 5  # folytassa a feltetel beolvasasaval
                 else:
-                    valasz_szoveg += k
-                    read_mode = 6
+                    valasz_szoveg += k  # adja hozza a valasz szovegehez ezt a betut
+                    read_mode = 6       # folytassa a valasz szoveg beolvasasaval
 
             else:
                 oldal_szoveg += k
 
-        elif read_mode == 5:
-            # kitetelek
-            if k == "[":
+        elif read_mode == 5:  # feltetelek beolvasasa
+            if k == " ":
+                continue
+            elif k == "[":
                 continue
             elif k == "]":
                 if len(feltetel) > 0:
@@ -130,41 +137,61 @@ def beolvas(faljnev, konyv):
             else:
                 feltetel += k
 
-        elif read_mode == 6:
-            # valasz szoveg
-            if k == "[":
+        elif read_mode == 6:  # valasz szovegenek beolvasasa
+            if k == "{":
                 read_mode = 7
+            elif k == "[":
+                read_mode = 8
                 continue
             else:
                 valasz_szoveg += k
                 continue
 
-        elif read_mode == 7:
-            # celoldal, ahova a valasz vezet
+        elif read_mode == 7:  # jutalom beolvasasa, ami a valaszert jar
+            if k == "{":
+                continue
+            elif k == "}":
+                if len(jutalom) > 0:
+                    jutalmak.append(jutalom)
+                jutalom = ""
+                read_mode = 8
+                k = f.read(1)  # space olvasasa
+                continue
+            elif k == ",":
+                jutalmak.append(jutalom)
+                jutalom = ""
+                continue
+            else:
+                jutalom += k
+
+        elif read_mode == 8:  # celoldal beolvasasa, ahova a valasz vezet
             if k == " ":
                 continue
             elif k == "]":
-                read_mode = 8
+                read_mode = 10
                 continue
             elif k.isdigit() or k == "-":
                 ide_vezet += k
 
-        elif read_mode == 8:
+        elif read_mode == 10:
             if ide_vezet == "":
                 ide_vezet = "0"
-            konyv.oldalak[int(oldalszam)-1].valasz_hozzaadasa(valasz_szoveg, int(ide_vezet), feltetelek)
+            konyv.oldalak[int(oldalszam)-1].valasz_hozzaadasa(valasz_szoveg, int(ide_vezet), feltetelek, jutalmak)
             valasz_szoveg = ""
             ide_vezet = ""
             feltetelek = []
+            jutalmak = []
             read_mode = 1
     f.close()
+
 
 class Valasz:
     def __init__(self, szoveg="<ures valasz>", celoldal=0):
         self.szoveg = szoveg
         self.celoldal = celoldal
-        self.feltetel_ha_van = []
-        self.feltetel_ha_nincs = []
+        self.feltetel_ha_van = []    # ami kell, hogy ez a valasz valaszthato legyen
+        self.feltetel_ha_nincs = []  # ami, ha van, ez a valasz nem valaszthato
+        self.jutalom = []  # amit a karakter kap, ha ezt a valaszt valasztja
 
     def felteteleket_hozzaad(self, feltetel):
         if isinstance(feltetel, str):
@@ -206,9 +233,11 @@ class Oldal:
         self.szoveg = "Ez az oldal ures."
         self.valaszok = []
 
-    def valasz_hozzaadasa(self, valasz, ide_vezet, feltetelek):
+    def valasz_hozzaadasa(self, valasz, ide_vezet, feltetelek=[], jutalmak=[]):
         self.valaszok.append(Valasz(valasz, ide_vezet))
         self.valaszok[len(self.valaszok)-1].felteteleket_hozzaad(feltetelek)
+        self.valaszok[len(self.valaszok)-1].jutalom = jutalmak
+
 
 class Konyv:
     def __init__(self):

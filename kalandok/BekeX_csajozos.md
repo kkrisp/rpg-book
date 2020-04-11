@@ -3,11 +3,12 @@
 ### 1.Oldal
 Péntek este van. Rákészültél az éjszakára. Zsoca, a legjobb haverod azt mondta, ma zsákolni fogtok. Mármint nem egymással, hanem nőkkel. Igaziakkal. Lélegzőkkel. Bár, ha az nem jönne össze, tőle akár ti ketten is… de ezt majd megbeszélitek később. Álljunk pozitívan a kérdéshez, mondta Zsoca, a legjobb haverod a világon. Felvetted a legnyálasabb garbód, amit anyutól kaptál karácsonyra, és kifényezted a makkos súzt, készen állsz, mi a faszt teszel, haver?
 > * Megvárom, amíg Zsoca felvesz a Skodájával. [3.oldal]
+> * Lelopakodom a konyhába, és a hűtő tetejéről elviszem a fater fél üveg vodkáját. {vodka} [51.oldal]
 > * Lenémítom a telefonom, hogy ne halljam, ha Zsoca hív, levetkőzök, és lefekszem aludni. [2.oldal]
 
 ### 2. Oldal
 Tudom, nem úgy hangzik, de… GYŐZTÉL!! Egyel kevesebb csalódás, egyel kevesebb megaláztatás, és ha minden frankón sikerül, egyel kevesebb gáz barát, aki nem kis valószínűséggel látens homoszexuális. Ráadásul a felszedett gáré családjával sem kell megverekedned, ha nem akarod fizetni a gyerektartást, amikor két hónap múlva lefiall. Hosszú és eredményes életet!
-> * Gratula! [-1.oldal] {}
+> * Gratula! [-1.oldal]
 
 ### 3. Oldal
 Rossz döntés, de legyen. Várakozol, amíg Zsoca, a világ legjobb haverja megérkezik. A kipimpelt telefonjáról csörög rád, úgy visszhangzik, hogy legszívesebben kicsavarnád a kezéből az éteren át, és bebasznád vele a fejét, nade… jól tudod, hogy ő az egyetlen esélyed, hogy valaha is zsákolj. Te aztán tényleg nagy szarban vagy. Zsoca, a legjobb haverod leparkol a házatok előtt. Apád elhúzza a függönyt, hogy lássa, ki az a fasz, aki ilyen szar zenét bömböltet. Na?
@@ -63,6 +64,7 @@ A nappaliban nagy az élet, megy a buli, valami erőgépről Megasound System n�
 > * Dumázok neki a vadiúj spoileremről [14.oldal]
 > * Megkérdezem, gáznak érezné-e bevenni a farkam [12.oldal]
 > * Felajánlom, hogy megmasszírozom [15.oldal]
+> * [vodka] Amúgy van nálam egy üveg vodka, nem akarjuk meginni? [52.oldal]
 
 ### 14.oldal
 Le se szarja. És be kell látnod, hogy igaza van. Ki a retket érdekel akárkinek a spoilere. Ráadásul neked még kocsid sincs. Ha lenne is, az apádé lenne. Szerencsére ezt ő nem tudja, úgyhogy egyelőre csak azért utál, amiért idegen szavakkal próbálsz rajkodni meg autós balfaszságokkal untatod. Ideje változtatni a taktikán!
@@ -204,7 +206,8 @@ Nincs, azt kell hazudnod, hogy te is híres vagy
 ### 39.oldal
 Csak egy levél Seduxent találsz a zsebedben. A szemébe nézel, és a legkedvesebb mosolyoddal, amit még mindig csak valami ótvar belterjes vigyorként lehet jellemezni, átnyújtod neki a gyógyszereket. Undorodva mér végig, és azt kérdezi, vodkád nincs hozzá?
 > * Csókolj meg! [42.oldal]
-> * Ha két percig meg tudsz maradni a drogos valagadon, akkor szerzek[44.oldal]
+> * [-vodka] Ha két percig meg tudsz maradni a drogos valagadon, akkor szerzek [44.oldal]
+> * [vodka] Olyan mosollyal, amit egy szatír is megirigyelne, meglóbálod előtte. A nálad lévő vodkásüveget. [52.oldal]
 
 ### 40.oldal
 Hát ez kurvára nem hatja meg, talán van kedve lerészegedni, mint a disznó
@@ -234,7 +237,7 @@ Akkor te nyilván nem ezt a játékot játszod, ami nem okés, szóval itt az id
 
 ### 46.oldal
 Az csak az eminens Szilágyi feje, a vodkával foglalkozz
-> * Energiát!![47.oldal]
+> * Energiát!! [47.oldal]
 
 ### 47.oldal
 Kiszabadítod a vodkát egy tányér lehányt kocsonya mögül, és rögtön Kinga szájába rakod. De a kis hülye kiköpi, és nyúlkál tovább a vodka felé. Hálátlan! Odanyújtod neki az üveget, bedob pár Sedut, meghúzza a piát, és már látod rajta, hogy jó minden megint. Persze, csak ki ne üsse magát teljesen, legalább egy szekrényig menjen el a saját lábán. Késő. Lebucskázik a hokedliról, még próbálod megállítani a makkos súz csőrével, de csak szétrobbantod a száját, ő meg attól még ugyanúgy elterül a kövezeten. És most?
@@ -258,5 +261,15 @@ Meg sem fordulsz, amikor a levegőbe repül a ház. Letudtad az életed ezen ré
 Épp rá akarnál gyújtani, amikor a fejed fölött megjelenik a Voyager, föderációs űrbalhé. Janeway kapitány egy megafonon felszólít, hogy add meg magad. Valamit karattyol a tönkretett idővonalról, amit a detonáció okozott, meg a törésről a téridő kontínuumban, aha, hát ebből semmit nem értettél. Azt is mondja, hogy rádirányították az összes fotontorpedójukat, de annyira amatőr, hogy nem kapcsolja ki a hangosbeszélőt, és hallod, ahogy összeröhögnek Chakotay elsőtiszttel és Tuvokkal, aki most tanulja a hazudozást, hogy igazából nincs is torpedójuk, de még szaros fézersugaruk se, mert mindent lelopdostak a gépről a hobóborgok. Felidegesítenek, úgyhogy felkapsz egy kavicsot, és megdobod a hajót, mire beindulnak a vészszirénák, és Kim zászlós pánikban jelenti, hogy megszűntek a pajzsok. Vörös riadó következik, majd a gépházból B’Ellana és Hetes egy talicskával kidobják a hajtóműmagot, mielőtt valami gebasz lenne. Janeway egy utolsó elkeseredett kísérletet tesz, és kiadja az utasítást Kimnek, hogy mérjenek be a teleportokkal. Szabályosan érzed magadon a teleportsugár langymelegét, de jól megveted a lábad, és amikor a Voyager megpróbál felteleportálni a fedélzetre, egyszerűen nem mész. Akkor vonósugarat lőnek rád, de te megint jó erősen megveted a lábad, és a Voyager teljes egészében remegni kezd, ahogy az energiák majd’ szétszakítják, végül az egész ócskavas lezuhan, három méterre melléd.
 Te átkutatod a roncsokat, és nagy örömödre életben találod B’Ellanát, Hetest, Kest és Janewayt (meg még néhány arcot a legénységből, de őket agyonrugdosod a makkos súzoddal), fogod hát őket, megkötözöd, és bezárod a pincétekbe, örök szexrabszolgának. Persze muszáj őket megosztanod a fateroddal, hogy ne szeletelje fel a seggedet a zsírúj Gilette-jével, de nem is bánod, végre valami büszkeséghez hasonlót látsz az apád szemében, amikor rád néz. Nem is vagy te olyan elveszett gyerek! GYŐZTÉL! Hosszú, eredményes életet!
 > * Nyertél! Kiléphetsz... [-1.oldal]
+
+### 51.Oldal
+A vodkát berakod az inventorydba, aztán várakozol, amíg Zsoca, a világ legjobb haverja megérkezik. A kipimpelt telefonjáról csörög rád, úgy visszhangzik, hogy legszívesebben kicsavarnád a kezéből az éteren át, és bebasznád vele a fejét, nade… jól tudod, hogy ő az egyetlen esélyed, hogy valaha is zsákolj. Te aztán tényleg nagy szarban vagy. Zsoca, a legjobb haverod leparkol a házatok előtt. Apád elhúzza a függönyt, hogy lássa, ki az a fasz, aki ilyen szar zenét bömböltet. Na?
+> * Azt mondom apámnak, hogy majd én elintézem, fogok egy kést, és megindulok a kocsi felé. [4. Oldal]
+> * Azt mondom, fogalmam sincs, de amikor a fater megkérdezi, hogy miért locsoltam annyi kölnit magamra, mint egy buzi, akkor sikítva kirohanok az ajtón, és bepattanok Zsoca verdájába. [5.oldal]
+
+### 52.oldal
+Megpróbálod az üvegből a szájába tölteni, De a kis hülye kiköpi, és nyúlkál az üveg felé. Hálátlan! Odanyújtod neki az üveget, bedob pár Sedut, meghúzza a piát, és már látod rajta, hogy jó minden megint. Persze, csak ki ne üsse magát teljesen, legalább egy szekrényig menjen el a saját lábán. Késő. Lebucskázik a hokedliról, még próbálod megállítani a makkos súz csőrével, de csak szétrobbantod a száját, ő meg attól még ugyanúgy elterül a kövezeten. És most?
+> * A melltartójába csúsztatom a mobilszámom, és hazamegyek [48.oldal]
+> * A melltartójába csúsztatom a farkam, és hazamegyek [49.oldal]
 
 # End
