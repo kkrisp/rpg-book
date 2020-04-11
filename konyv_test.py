@@ -2,7 +2,6 @@
 
 import konyv
 
-
 def szoveg_kiirasa(szoveg, margo=0, behuzas=0):
     sorhossz = 0
     elso_sor_margo = margo + behuzas
@@ -12,6 +11,8 @@ def szoveg_kiirasa(szoveg, margo=0, behuzas=0):
         behuzas = 0
     sor = "" + " " * elso_sor_margo
     for karakter in szoveg:
+        if karakter == "\n":
+            sorhossz = 0
         sorhossz += 1
         sor += karakter
         if sorhossz > 80:
@@ -25,30 +26,36 @@ betuk_szamokka = {"a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f": 5, "g": 6, "h": 7
 valasz = ""
 
 k = konyv.Konyv()
-konyv.beolvas("Troll_a_hidon.md", k)
+konyv.beolvas("kalandok/Troll_a_hidon.md", k)
 cnt = 0
 jelenlegi_oldalszam = 1
 jelenlegi_valasz = 1
 program_fut = True
 elozo_valasz = "jo"
 hatizsak = []
-test = True
+test = False
 
 while program_fut:
+    val_kor = k.oldalak[jelenlegi_oldalszam-1].valaszlistat_general(hatizsak)
+    szov_kor = k.oldalak[jelenlegi_oldalszam-1].szoveget_general(hatizsak)
     if test:
         for val in k.oldalak[jelenlegi_oldalszam-1].valaszok:
-            print(val.feltetel_ha_van)
-            print(val.feltetel_ha_nincs)
+            print("felt+:", val.feltetel_ha_van)
+            print("felt-:", val.feltetel_ha_nincs)
+            print("jut:", val.jutalom)
             print("ide", val.celoldal)
     print()
-    szoveg_kiirasa(k.oldalak[jelenlegi_oldalszam-1].szoveg)
+    szoveg_kiirasa(szov_kor)
     print()
     szamlalo = 0
-    for val in k.oldalak[jelenlegi_oldalszam-1].valaszok:
+    for val in val_kor:
         valaszthato = True
+        if len(val.feltetel_ha_van) < 1:
+            valaszthato = False
         for f in val.feltetel_ha_van:
-            if f not in hatizsak:
+            if f in hatizsak:
                 valaszthato = False
+        valaszthato = not valaszthato
         for f in val.feltetel_ha_nincs:
             if f in hatizsak:
                 valaszthato = False
@@ -84,10 +91,10 @@ while program_fut:
 
     elif valasz in betuk:
         valasz_szama = betuk_szamokka[valasz]
-        if valasz_szama < len(k.oldalak[jelenlegi_oldalszam-1].valaszok):
-            for j in k.oldalak[jelenlegi_oldalszam-1].valaszok[valasz_szama].jutalom:
+        if valasz_szama < len(val_kor):
+            for j in val_kor[valasz_szama].jutalom:
                 hatizsak.append(j)
-            jelenlegi_oldalszam = k.oldalak[jelenlegi_oldalszam-1].valaszok[valasz_szama].celoldal
+            jelenlegi_oldalszam = val_kor[valasz_szama].celoldal
             elozo_valasz = "jo"
         else:
             elozo_valasz = "out"
@@ -96,3 +103,6 @@ while program_fut:
     else:
         elozo_valasz = "invalid"
     print("\n " + "-"*78 + " ")
+    if jelenlegi_oldalszam == -1:
+        print("kilepes")
+        break
