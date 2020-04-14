@@ -332,7 +332,6 @@ class Oldal:
 
     def valaszlistat_general(self, p_meglevo_feltetelek):
         r_lista = []
-        mehet = False
         for i in range(len(self.valaszok)):
             mehet = False
             for felt in p_meglevo_feltetelek:
