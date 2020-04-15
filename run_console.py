@@ -76,64 +76,79 @@ urwid.MainLoop(frame, szinek, unhandled_input=kilepes).run()
 #print(g_valsztott_kaland)
 
 megnyitott_konyv = konyv.Konyv()
-konyv.beolvas("rpg-book/kalandok/Troll_a_hidon.md", megnyitott_konyv)
+konyv.beolvas("kalandok/Troll_a_hidon.md", megnyitott_konyv)
 g_jelenlegi_oldal = [0]
+g_hatizsak = ['kard']
+
 
 class ValaszGomb:
-    def __init__(self, celoldal, szoveg):
+    def __init__(self, szoveg="Ures valasz", celoldal=-1, p_jutalom=[]):
         self.celoldal = celoldal
+        self.jutalom = p_jutalom
         self.gomb = urwid.AttrMap(
             urwid.Button(
                 szoveg,
-                self.valasz_kivalasztva),
+                self.kivalaszt),
             None,
             focus_map='invertalt')
 
-    def valasz_kivalasztva(self, p_gomb):
-        g_jelenlegi_oldal[0] += 1 #self.celoldal
-        if g_jelenlegi_oldal[0] > 3:
-            raise urwid.ExitMainLoop()
-        testoldal.oldalt_betolt(g_jelenlegi_oldal[0])
-        fejlec.set_text("Valasztott celoldal: " + str(self.celoldal))
+    def kivalaszt(self, p_gomb):
+        g_jelenlegi_oldal[0] = self.celoldal
+        lapoz(g_jelenlegi_oldal[0], testoldal)
+        fejlec.set_text("Valasztott celoldal: " + str(g_jelenlegi_oldal[0]))
+        jut_szoveg = ""
+        for j in self.jutalom:
+            g_hatizsak.append(j)
+            jut_szoveg += j + " "
+        fejlec.set_text("Jutalmad: " + jut_szoveg)
+
+    def set_data(self, uj_szoveg):
+        self.gomb.set_text(uj_szoveg)
 
 class KalandKonyvOldal:
-    def __init__(self):
-        self.szoveg = "Ures oldal"
-        self.valaszok = ["Ures valasz"]
-        self.celoldalak = []
-        self.tartalom = None
-        self.oldalt_betolt(g_jelenlegi_oldal[0])
-
-    def oldalt_betolt(self, p_oldalszam):
-        p_konyv_oldal = megnyitott_konyv.oldalak[p_oldalszam]
-        szoveg = p_konyv_oldal.szoveget_general([])
-        valaszok = p_konyv_oldal.valaszlistat_general([])
-        tartalom = [
+    def __init__(self, p_szoveg="Ures oldal"):
+        self.jelenet = [
             sorkihagyas,
-            urwid.Text(szoveg),
-            urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
-            sorkihagyas
+            urwid.Text(p_szoveg),
+            urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto')
         ]
+        self.valaszlehetosegek = urwid.SimpleListWalker([])
+        self.tartalom = urwid.AttrWrap(urwid.Pile(self.jelenet + self.valaszlehetosegek), 'szoveg')
+        self.lapoz(0)
+
+    def oldalt_betolt(self, p_konyv_oldal):
+        szoveg = p_konyv_oldal.szoveget_general(g_hatizsak)
+        valaszok = p_konyv_oldal.valaszlistat_general(g_hatizsak)
+        #self.jelenet[1].set_text(szoveg)
+        self.jelenet[1] = urwid.Text(szoveg)
+        l_valaszlista = []
         cnt = 0
-        self.celoldalak = []
-        for val in valaszok:
-            valasz_szoveg = betuk[cnt] + ") " + val.szoveg
-            kivalaszas_gomb = ValaszGomb(val.celoldal, valasz_szoveg)
-            tartalom.append(kivalaszas_gomb.gomb)
+        for l_v in valaszok:
+            l_valaszlista.append(ValaszGomb(betuk[cnt]+") "+l_v.szoveg, l_v.celoldal, l_v.jutalom).gomb)
             cnt += 1
-            self.celoldalak.append(val.celoldal)
-        self.tartalom = urwid.Pile(tartalom)
+        self.valaszlehetosegek = urwid.SimpleListWalker(l_valaszlista)
+        self.tartalom.original_widget = urwid.Pile(self.jelenet + self.valaszlehetosegek)
+
+    def lapoz(self, celoldal):
+        if celoldal < 0:
+            raise urwid.ExitMainLoop()
+        self.oldalt_betolt(megnyitott_konyv.oldalak[celoldal])
 
 testoldal = KalandKonyvOldal()
-
-
 fomenu_tartalom = [
     urwid.Padding(testoldal.tartalom, left=4, right=3, min_width=20)
 ]
+
+def lapoz(celoldal, kalankonyvoldal):
+    if celoldal < 0:
+        raise urwid.ExitMainLoop()
+    kalankonyvoldal.oldalt_betolt(megnyitott_konyv.oldalak[celoldal-1])
+    loop.watch_pipe("test")
+
+
 fejlec = urwid.AttrWrap(urwid.Text(fejlec_tartalom), 'fejlec')
 fomenu = urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom))
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
 
-urwid.MainLoop(frame, szinek, unhandled_input=kilepes).run()
-
-print(g_jelenlegi_oldal[0])
+loop = urwid.MainLoop(frame, szinek, unhandled_input=kilepes)
+loop.run()

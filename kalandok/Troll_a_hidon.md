@@ -3,7 +3,7 @@
 ### 1.oldal
 Mielott kalandodat elkezded, mondd, mi akarsz lenni?
 > * Harcos {kard} [10.oldal]
-> * Nemes {hidegver} [10.oldal]
+> * Nemes {hidegver, 100_arany} [10.oldal]
 > * Szakacs {sult_csirke} [10.oldal]
 
 ### 10.Oldal

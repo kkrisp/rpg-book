@@ -57,6 +57,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
         if l_betu == ">" or l_betu == "#":
             break
         elif l_betu == "(":
+            l_feltetelek = ""
             l_felteteles_szoveg = ""
             while l_betu != ")":
                 l_betu = p_fajl.read(1)
@@ -107,7 +108,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             while l_betu != "}":
                 l_betu = p_fajl.read(1)
                 l_lista_buffer += l_betu
-            l_valasz_buffer.jutalom.append(l_lista_buffer[:-1])
+            l_valasz_buffer.jutalom = listat_olvas(l_lista_buffer[:-1], no_space=True)
         while l_betu not in speckar:
             pass
             l_betu = p_fajl.read(1)
@@ -251,6 +252,8 @@ class Valasz:
         self.jutalom = []  # amit a karakter kap, ha ezt a valaszt valasztja
 
     def felteteleket_hozzaad(self, feltetel):
+        if len(feltetel) < 1:
+            return
         if isinstance(feltetel, str):
             if feltetel[0] == '-':
                 self.feltetel_ha_nincs.append(feltetel[1:])
