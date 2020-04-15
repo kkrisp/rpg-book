@@ -33,6 +33,25 @@ sorkihagyas = urwid.Divider()
 
 g_valsztott_kaland = ["Nincs"]
 
+
+def arnyekot_hozzaad(w):
+
+    bg = urwid.AttrWrap(urwid.SolidFill(u"\u2592"), 'screen edge')
+    shadow = urwid.AttrWrap(urwid.SolidFill(u" "), 'main shadow')
+
+#  left right
+#  top bottom
+
+    bg = urwid.Overlay(shadow, bg,
+        'center', 100,
+        'middle', 33,
+        left=4, top=2)
+    w = urwid.Overlay(w, bg,
+        'center', 100,
+        'middle', 33,
+        min_width=50, min_height=20)
+    return w
+
 class KalandValszto:
     def __init__(self, p_cim, p_elonezet, p_tag):
         self.tag = p_tag
@@ -68,7 +87,7 @@ fomenu_tartalom = [
 ]
 
 fejlec = urwid.AttrWrap(urwid.Text(fejlec_tartalom), 'fejlec')
-fomenu = urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom))
+fomenu = arnyekot_hozzaad(urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)))
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
 
 urwid.MainLoop(frame, szinek, unhandled_input=kilepes).run()
@@ -100,7 +119,6 @@ class ValaszGomb:
         for j in self.jutalom:
             g_hatizsak.append(j)
             jut_szoveg += j + " "
-        fejlec.set_text("Jutalmad: " + jut_szoveg)
 
     def set_data(self, uj_szoveg):
         self.gomb.set_text(uj_szoveg)
@@ -147,7 +165,7 @@ def lapoz(celoldal, kalankonyvoldal):
 
 
 fejlec = urwid.AttrWrap(urwid.Text(fejlec_tartalom), 'fejlec')
-fomenu = urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom))
+fomenu = arnyekot_hozzaad(urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)))
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
 
 loop = urwid.MainLoop(frame, szinek, unhandled_input=kilepes)
