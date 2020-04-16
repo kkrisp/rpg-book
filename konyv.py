@@ -126,23 +126,22 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     # oldal feltoltve...
 
 
-def beolvas(faljnev, konyv):
+def beolvas(faljnev, konyv, max_oldalszam=100):
     f = open(faljnev, 'r')  # 'md' kiterjesztesu fajl, ahonnan a kalandot beolvassuk
     k = "0"                 # a beolvasott karakter (a fajlt karakterenkent olvassuk)
-    maxpage = 100           # a maximalis beolvashato oldalak szama (memoria vedelme)
+    #max_oldalszam = 100    # a maximalis beolvashato oldalak szama (memoria vedelme)
     read_mode = 0           # olvasasi mod (lasd a kommentet a fuggveny felett)
     oldal_buffer = Oldal()
     valasz_buffer = Valasz()
-    kaland_cim = ""         # buffer: kaland cime
+    konyv.cim = ""          # kaland cime - nullazas
     oldalszam = 0           # buffer: jelenlegi oldalszam
-    oldal_szoveg = ""       # buffer: egy oldal szovege
     valasz_szoveg = ""      # buffer: egy valasz szovege
     ide_vezet = 1           # buffer: celoldal, ahova egy valasz vezet
     feltetelek = []         # buffer: feltetelek listaja egy valaszhoz
     jutalmak = []           # buffer: jutalmak listaja egy valaszhoz
-    automata_oldalszam = 0
     listaszamlalo = 0
     l_oldal_olvasas_volt = False
+    beolvasott_oldalak_szama = 0
 
     while k:  # ameddig el nem erjuk a file veget
         k_elozo = k
@@ -181,8 +180,11 @@ def beolvas(faljnev, konyv):
             continue
 
         elif read_mode == 3:  # uj oldal
+            if beolvasott_oldalak_szama > max_oldalszam:
+                break
             oldalt_olvas(f, k, konyv)
             l_oldal_olvasas_volt = True
+            beolvasott_oldalak_szama += 1
 
         elif read_mode == 4:  # oldal szovegenek beolvasasa
             if k == "(":
@@ -240,6 +242,7 @@ def beolvas(faljnev, konyv):
             feltetelek = []
             jutalmak = []
             read_mode = 1
+    konyv.cim = takarit(konyv.cim)
     f.close()
 
 

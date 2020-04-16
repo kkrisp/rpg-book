@@ -1,5 +1,6 @@
 import urwid
 import konyv
+import os
 
 program_info = "\
 RPG-BOOK szoveges kalandjatek szimulator\n\
@@ -26,6 +27,15 @@ szinek = [
     ('fejlec', 'white', 'dark red', 'bold')
 ]
 
+kaland_faljnev_lista = os.listdir("kalandok")
+kaland_lista = []
+
+cnt = 0
+for k_fn in kaland_faljnev_lista:
+    kaland_lista.append([k_fn, konyv.Konyv()])
+    konyv.beolvas("kalandok/" + k_fn, kaland_lista[cnt][1], max_oldalszam=2)
+    cnt += 1
+
 test_kaland_lista = [["Troll a hidon", "Amint at akarsz kelni a hidon, egy nagy troll bujik ki a hid alol. Bore zold..."],
                 ["Hazibuli", "Kiveszed a zsebedbol a vodkat, es diadalittas vigyorral..."]]
 
@@ -33,6 +43,17 @@ sorkihagyas = urwid.Divider()
 
 g_valsztott_kaland = ["Nincs"]
 
+
+def lerovidit(szoveg, sorhossz, sorok):
+    r_szoveg = ""
+    karakterszam = sorok * sorhossz
+    if len(szoveg) > karakterszam:
+        r_szoveg = szoveg[:karakterszam-3] + "..."
+    else:
+        r_szoveg = szoveg
+        while len(r_szoveg) < karakterszam:
+            r_szoveg += " "
+    return r_szoveg
 
 def arnyekot_hozzaad(w):
 
@@ -59,7 +80,7 @@ class KalandValszto:
         self.tartalom = urwid.LineBox(urwid.Pile([
             urwid.Text(p_cim),
             sorkihagyas,
-            urwid.Text(p_elonezet),
+            urwid.Text(lerovidit(p_elonezet, 5, 30)),
             sorkihagyas,
             kivalaszas_gomb,
         ]))
@@ -68,36 +89,36 @@ class KalandValszto:
         raise urwid.ExitMainLoop()
 
 uw_kaland_lista = []
-for l_kaland in test_kaland_lista:
-    this = KalandValszto(l_kaland[0], l_kaland[1], l_kaland[0])
+for l_kaland in kaland_lista:
+    this = KalandValszto(l_kaland[1].cim, l_kaland[1].oldalak[0].szoveg, l_kaland[0])
     uw_kaland_lista.append(this.tartalom)
 
 fomenu_tartalom = [
-    sorkihagyas,
     urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
     urwid.Padding(urwid.Text(program_info, align='center'), left=2, right=2, min_width=20),
-    urwid.AttrWrap(urwid.Divider("-", 1, 0), 'elvalaszto'),
-    sorkihagyas,
+    urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
     urwid.Padding(urwid.Text(("szoveg", u"Valaszthato kalandok")), left=2, right=2, min_width=20),
     sorkihagyas,
     urwid.Padding(
-        urwid.GridFlow(uw_kaland_lista, 30, 3, 1, 'center'),
-        left=4, right=3, min_width=13
+        urwid.GridFlow(uw_kaland_lista, 32, 1, 1, 'center'),
+        left=4, right=3, min_width=13,
     )
 ]
 
 fejlec = urwid.AttrWrap(urwid.Text(fejlec_tartalom), 'fejlec')
-fomenu = arnyekot_hozzaad(urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)))
+fomenu = arnyekot_hozzaad(urwid.Padding(urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)), left=4, right=3, min_width=20))
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
 
 urwid.MainLoop(frame, szinek, unhandled_input=kilepes).run()
 
 #print(g_valsztott_kaland)
 
+if g_valsztott_kaland[0] == "Nincs":
+    exit()
 megnyitott_konyv = konyv.Konyv()
-konyv.beolvas("kalandok/Troll_a_hidon.md", megnyitott_konyv)
+konyv.beolvas("kalandok/" + g_valsztott_kaland[0], megnyitott_konyv)
 g_jelenlegi_oldal = [0]
-g_hatizsak = ['kard']
+g_hatizsak = []
 
 
 class ValaszGomb:
@@ -112,13 +133,16 @@ class ValaszGomb:
             focus_map='invertalt')
 
     def kivalaszt(self, p_gomb):
+        fejlec_szoveg = "Valasztott celoldal: " + str(g_jelenlegi_oldal[0])
         g_jelenlegi_oldal[0] = self.celoldal
-        lapoz(g_jelenlegi_oldal[0], testoldal)
-        fejlec.set_text("Valasztott celoldal: " + str(g_jelenlegi_oldal[0]))
-        jut_szoveg = ""
         for j in self.jutalom:
             g_hatizsak.append(j)
-            jut_szoveg += j + " "
+
+        for targy in g_hatizsak:
+            fejlec_szoveg += ", <" + targy + ">"
+        fejlec.set_text(fejlec_szoveg)
+        # a lapozas a hatizsak feltoltese utan kell jojjon, kulonben olyan, mintha a nem frissult volna
+        lapoz(g_jelenlegi_oldal[0], testoldal)
 
     def set_data(self, uj_szoveg):
         self.gomb.set_text(uj_szoveg)

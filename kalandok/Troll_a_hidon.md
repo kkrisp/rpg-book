@@ -1,21 +1,22 @@
-# Kaland cime
+# Troll a hidon (tesztjatek)
 
 ### 1.oldal
 Mielott kalandodat elkezded, mondd, mi akarsz lenni?
 > * Harcos {kard} [10.oldal]
-> * Nemes {hidegver, 100_arany} [10.oldal]
+> * Nemes {kard, hidegver, 100_arany} [10.oldal]
 > * Szakacs {sult_csirke} [10.oldal]
 
 ### 10.Oldal
 Amint at akarsz kelni a hidon, egy nagy troll bujik ki a hid alol. Bore zold, haja szurke es loboncos. ([sult_csirke] Erosen szimatol a tarisznyad iranyaba.)
 > * [kard] Elohuzom a kardomat [2.oldal]
-> * [turelem, hidegver] Nyugodtan allok tovabb [3.oldal]
-> * [sult_csirke, -kard, -hidegver] Rimankodni kezdek az eletemert [3.oldal]
+> * [hidegver] Nyugodtan allok tovabb [3.oldal]
+> * [-hidegver] Rimankodni kezdek az eletemert [3.oldal]
 
 ### 2. Oldal
 A troll osszhuzza a szemeit es megszolal:
 - Sok kalandozo probalt mar meg megolni, de mindotthagytak a fogukat! Jobban teszed hat, ha elteszed azt a fogpiszkalot!
  > * [kard] Elteszem a kardomat [3.oldal]
+ > * [hidegver] Nyugodtan elmosolyodom. - Nem bantani akarlak, de a kard marad - mondom. [3.oldal]
  > * [kard] Kivont karddal, neman allok tovabb [4.oldal]
  > * [kard] Kivont karddal azt kialtom neki: Latom a beszed jobban megy mint a harc. Pedig azt hittem ma kivetelesen egy bator trollt olok meg! [5.oldal]
 
