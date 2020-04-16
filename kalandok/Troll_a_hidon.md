@@ -16,8 +16,8 @@ Amint at akarsz kelni a hidon, egy nagy troll bujik ki a hid alol. Bore zold, ha
 A troll osszhuzza a szemeit es megszolal:
 - Sok kalandozo probalt mar meg megolni, de mindotthagytak a fogukat! Jobban teszed hat, ha elteszed azt a fogpiszkalot!
  > * [kard] Elteszem a kardomat [3.oldal]
- > * [hidegver] Nyugodtan elmosolyodom. - Nem bantani akarlak, de a kard marad - mondom. [3.oldal]
- > * [kard] Kivont karddal, neman allok tovabb [4.oldal]
+ > * [hidegver] Nyugodtan elmosolyodom. - Nem bantani akarlak, de a kard marad - mondom.[3.oldal]
+ > * [kard] Kivont karddal, neman allok tovabb.[4.oldal]
  > * [kard] Kivont karddal azt kialtom neki: Latom a beszed jobban megy mint a harc. Pedig azt hittem ma kivetelesen egy bator trollt olok meg! [5.oldal]
 
 ### 3. Oldal
@@ -46,7 +46,7 @@ A troll elmosolyodik, es belefog a kerdesbe:
 ### 7.oldal
 - Rendben - mondja a troll, ide azzal a csirkevel!
 A troll elveszi a csirket es megeszi. Kozben elkapja a labad es megesz teged is! Vesztettel!
-> * Te moho kocso... hamcs NYAMM HABZS!! [-1.oldal]
+> * Te bélpoklos... hamcs NYAMM HABZS!! [-1.oldal]
 
 ### 8.oldal
 A troll lecsap a bunkojaval... Vesztettel!
