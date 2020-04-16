@@ -17,11 +17,11 @@ def kilepes(key):
         raise urwid.ExitMainLoop()
 
 szinek = [
-    ('invertalt', 'standout', ''),
-    ('szoveg', 'black', 'light gray', 'standout'),
-    ('szoveg_cim', 'black, bold', 'light gray', ''),
+    ('invertalt', 'standout', '', ''),
+    ('szoveg', 'black', 'light gray', ''),
+    ('szoveg_cim', 'black', 'light gray', ''),
     ('kiemeles', 'dark blue', 'light gray', ('standout', 'underline')),
-    ('elvalaszto', 'black', 'light gray', 'standout'),
+    ('elvalaszto', 'black', 'light gray', ''),
     ('szovegdoboz', 'black', 'dark red'),
     ('hatter', 'black', 'dark blue'),
     ('fejlec', 'white', 'dark red', 'bold')
@@ -36,13 +36,9 @@ for k_fn in kaland_faljnev_lista:
     konyv.beolvas("kalandok/" + k_fn, kaland_lista[cnt][1], max_oldalszam=2)
     cnt += 1
 
-test_kaland_lista = [["Troll a hidon", "Amint at akarsz kelni a hidon, egy nagy troll bujik ki a hid alol. Bore zold..."],
-                ["Hazibuli", "Kiveszed a zsebedbol a vodkat, es diadalittas vigyorral..."]]
-
 sorkihagyas = urwid.Divider()
 
 g_valsztott_kaland = ["Nincs"]
-
 
 def lerovidit(szoveg, sorhossz, sorok):
     r_szoveg = ""
@@ -51,8 +47,6 @@ def lerovidit(szoveg, sorhossz, sorok):
         r_szoveg = szoveg[:karakterszam-3] + "..."
     else:
         r_szoveg = szoveg
-        while len(r_szoveg) < karakterszam:
-            r_szoveg += " "
     return r_szoveg
 
 def arnyekot_hozzaad(w):
@@ -64,11 +58,11 @@ def arnyekot_hozzaad(w):
 #  top bottom
 
     bg = urwid.Overlay(shadow, bg,
-        'center', 100,
+        'center', 86,
         'middle', 33,
         left=4, top=2)
     w = urwid.Overlay(w, bg,
-        'center', 100,
+        'center', 86,
         'middle', 33,
         min_width=50, min_height=20)
     return w
@@ -76,14 +70,14 @@ def arnyekot_hozzaad(w):
 class KalandValszto:
     def __init__(self, p_cim, p_elonezet, p_tag):
         self.tag = p_tag
-        kivalaszas_gomb = urwid.AttrMap(urwid.Button("Kivalaszt", self.kivalaszt), None, focus_map='invertalt')
-        self.tartalom = urwid.LineBox(urwid.Pile([
-            urwid.Text(p_cim),
-            sorkihagyas,
-            urwid.Text(lerovidit(p_elonezet, 5, 30)),
-            sorkihagyas,
-            kivalaszas_gomb,
-        ]))
+        kivalasztas_gomb = urwid.AttrMap(urwid.Button(p_cim, self.kivalaszt), 'szoveg_cim', focus_map='invertalt')
+        self.tartalom = urwid.Pile([
+            (2, urwid.Filler(kivalasztas_gomb, valign='top')),
+            urwid.Divider("-", 0, 0),
+            (4, urwid.Filler(urwid.Text(lerovidit(p_elonezet, 4, 30)), valign='top'))
+        ])
+        self.tartalom = urwid.AttrMap(urwid.LineBox(self.tartalom), None, focus_map='invertalt')
+
     def kivalaszt(self, p_button):
         g_valsztott_kaland[0] = self.tag
         raise urwid.ExitMainLoop()
@@ -100,8 +94,8 @@ fomenu_tartalom = [
     urwid.Padding(urwid.Text(("szoveg", u"Valaszthato kalandok")), left=2, right=2, min_width=20),
     sorkihagyas,
     urwid.Padding(
-        urwid.GridFlow(uw_kaland_lista, 32, 1, 1, 'center'),
-        left=4, right=3, min_width=13,
+        urwid.GridFlow(uw_kaland_lista, 35, 1, 0, 'left'),
+        left=2, right=2, min_width=13, align='left'
     )
 ]
 
