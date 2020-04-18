@@ -125,7 +125,8 @@ class ValaszGomb(urwid.AttrMap):
         g_jelenlegi_oldal[0] = self.celoldal
         for j in self.jutalom:
             g_hatizsak.append(j)
-        #fejlec.set_text(fejlec_szoveg)
+            fejlec_szoveg += j + " "
+        fejlec.set_text(fejlec_szoveg)
         # a lapozas a hatizsak feltoltese utan kell jojjon, kulonben olyan, mintha a nem frissult volna
         lapoz(g_jelenlegi_oldal[0], testoldal)
 
@@ -175,6 +176,7 @@ def lapoz(celoldal, kalankonyvoldal):
 fejlec = urwid.AttrWrap(urwid.Text(fejlec_tartalom), 'fejlec')
 fomenu = arnyekot_hozzaad(urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)), 86, 33)
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
+
 
 loop = urwid.MainLoop(frame, formazas, unhandled_input=kilepes)
 loop.run()

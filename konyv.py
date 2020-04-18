@@ -27,15 +27,6 @@ def listat_olvas(szoveg, elvalaszto=",", no_space=False):
     return r_lista
 
 
-def takarit(szovegsor):
-    """Leszedi az osszes 'whitespace' karaktert a sor vegerol."""
-    utolso_karakter = szovegsor[-1:]
-    while utolso_karakter == "\n" or utolso_karakter == " ":
-        szovegsor = szovegsor[:-1]
-        utolso_karakter = szovegsor[-1:]
-    return szovegsor
-
-
 def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     speckar = ["#", ">", "[", "{"]
     r_oldalszam = ""
@@ -78,7 +69,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             p_konyv.oldalak[l_osz].szoveg += l_betu
         l_kar_szam += 1
         l_betu = p_fajl.read(1)
-    p_konyv.oldalak[l_osz].szoveg = takarit(p_konyv.oldalak[l_osz].szoveg)
+    p_konyv.oldalak[l_osz].szoveg = p_konyv.oldalak[l_osz].szoveg.strip()
     # valaszok beolvasasa, ha vannak
     while l_betu == ">":
         l_valasz_buffer = Valasz()
@@ -242,7 +233,7 @@ def beolvas(faljnev, konyv, max_oldalszam=100):
             feltetelek = []
             jutalmak = []
             read_mode = 1
-    konyv.cim = takarit(konyv.cim)
+    konyv.cim = konyv.cim.strip()
     f.close()
 
 
@@ -314,7 +305,7 @@ class Oldal:
         l_kar_szam = 0
         for i in range(len(self.felteteles_szoveg)):
             mehet = False
-            if len(self.felteteles_szoveg[i].feltetel_ha_van) < 0:
+            if len(self.felteteles_szoveg[i].feltetel_ha_van) < 1:
                 mehet = True
             for felt in p_meglevo_feltetelek:
                 if felt in self.felteteles_szoveg[i].feltetel_ha_van:
@@ -325,15 +316,15 @@ class Oldal:
 
             if not mehet:
                 continue
+                
+            l_kar_szam = self.felteteles_szoveg[i].celoldal-1
+            r_szoveg = self.szoveg[:l_kar_szam].strip()
+            r_szoveg += " " + self.felteteles_szoveg[i].szoveg.strip()
 
-            while l_kar_szam < self.felteteles_szoveg[i].celoldal:
-                try:
-                    r_szoveg += self.szoveg[l_kar_szam]
-                    l_kar_szam += 1
-                except IndexError:
-                    break
-            r_szoveg += self.felteteles_szoveg[i].szoveg
-        r_szoveg += self.szoveg[l_kar_szam:]
+        while self.szoveg[l_kar_szam] == " ":
+            l_kar_szam += 1
+            pass
+        r_szoveg += " " + self.szoveg[l_kar_szam:]
         return r_szoveg
 
     def valaszlistat_general(self, p_meglevo_feltetelek):

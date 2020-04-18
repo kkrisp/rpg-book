@@ -39,7 +39,7 @@ Nem szeretnél arra gondolni, mi lesz holnap, ha hazaérsz, szóval megkéred Zs
 A bulit egy osztálytársad rendezi. Túl sok a kan. Azért leszaszerolsz egy-két segget, még elég tapasztalatlan vagy, nem tudod megkülönböztetni a női és a férfi(?) seggeket, ezért tényleg maradsz a szaszerolásnál, egyelőre nem fogdosol senkit. Zsoca, a legjobb haverod azonban egy seggbecsípéssel köszönti a vendéglátótokat, aki…
 > * Ferkó, a srác, aki utál téged, már akkor is utált, amikor általánosban elloptad a fekete Jaguar matchboxát [9.oldal]
 > * Bigbi, egy kis fasz, akinek a szülei túl sok zsebpénzt adnak, és most is a Kanári Kibaszott Szigeteken üdülnek [10.oldal]
-> * Piros, a lány, akinek állítólag mindenki bejuthat a bugyijába [11.oldal]
+> * Piros, a lány, akinek állítólag mindenki bejuthat a bugyijába {Piros_hazigazda} [11.oldal]
 
 ### 9.oldal
 Kezet nyújtasz, és Ferkó egy válldobással áthajint egy asztalon, amit telepakoltak Koktél Krékerrel meg mindenféle buziknak való chipsekkel. Aztán barátságosan biccent feléd, te mégsem érzed ki a jóindulatot a mozdulatból. Ráadásul a jobb keze középső ujját is feltartja. Zsoca, a legjobb haverod jót röhög, mondja, hogy ez mekkora poén már, aztán rögtön azt kérdezi Ferkótól, hogy hol vannak a bulák. Ferkó először nem akarja elárulni, de Zsoca egy kétszázast csúsztat a zsebébe (és közben mintha megcirógatná a srác golyóit, de erre nem mernél megesküdni). Ferkó a nappali felé biccent. Zsoca, a legjobb haver a világon int, hogy menjetek, állnak a pinák halomba, miazuristenrevársz. Feltápászkodsz. Ferkó egy pörgőrúgással mellbe talál, amitől nekicsapódsz a falnak. Ezen kicsit meglepődsz, mire azt mondja, hogy csak segíteni akart, és a kezét nyújtja, hogy felsegítsen. Engeded neki, de mintha kicsit erősebben szorítaná a kezed, mint az indokolt volna. Azért csak talpra állsz végül. Irány a nappali!
@@ -51,7 +51,7 @@ Bigbi észre sem vesz. Zsocával, a legjobb haveroddal kezet fog ugyan, mert Zso
 
 ### 11.oldal
 Persze, hogy mindenki ezt választotta. Sajnos Piros csúnya, mint a bűn. Persze azért nem úgy, mint a rút kiskacsa, hanem mint egy oszladozó hulla. Aki szart evett. Mert Pirosnak a szája is büdös.
-> * Azért megpróbálom neki becsempészni a lompost [12.oldal]
+> * Azért megpróbálom neki becsempészni a lompost {ajanlat_Pirosnak} [12.oldal]
 > * Igyekszem takarásban maradni, mondjuk nem azért, mert félek, hogy rámmászik, hanem hogy ne keresse rajtam a piát, amit a buliba hoztam [13.oldal]
 
 
@@ -60,9 +60,9 @@ Amikor megkérdezed, nincs-e kedve hancúrozni egyet, annyira elkezd röhögni, 
 > * Scotty… ez valamiféle időörvény lehet! Miről beszél kapitány? Energiát!! [13.oldal]
 
 ### 13.oldal
-A nappaliban nagy az élet, megy a buli, valami erőgépről Megasound System nóták mennek sorban, a srácok kegyetlen kemény gettóreppernek érzik magukat mind, aztán lobogtatják a kezüket, mint a faágakat a szélben, vagy mi, a lányok meg nagyon élvezik a bulizásokat meg a zenéket, akkor is, ha mind szexista szövegvilágú, persze erről még semmit sem tudnak, még nem értek el az emancipálódás azon fokára, még csak jókat vihognak azon, hogy Dope-T hogyan erőlteti be a pajszert minden sunába, yo. Zsoca, a legjobb haverod Klári seggét csapkodja, aki viszonzásképpen folyamatosan lefingja, és nagyon jól elvannak, tele pofával röhögnek egymás képébe. Te Piroshoz mész oda, aki valamiért fájlalja a bordáit. Mi lészen?
+A nappaliban nagy az élet, megy a buli, valami erőgépről Megasound System nóták mennek sorban, a srácok kegyetlen kemény gettóreppernek érzik magukat mind, aztán lobogtatják a kezüket, mint a faágakat a szélben, vagy mi, a lányok meg nagyon élvezik a bulizásokat meg a zenéket, akkor is, ha mind szexista szövegvilágú, persze erről még semmit sem tudnak, még nem értek el az emancipálódás azon fokára, még csak jókat vihognak azon, hogy Dope-T hogyan erőlteti be a pajszert minden sunába, yo. Zsoca, a legjobb haverod Klári seggét csapkodja, aki viszonzásképpen folyamatosan lefingja, és nagyon jól elvannak, tele pofával röhögnek egymás képébe. ([vodka] Van nalad egy vodka.) ([-Piros_hazigazda] Te Piroshoz mész oda, akinek állítólag mindenki bejuthat a bugyijába.)  ([Piros_hazigazda, -ajanlat_Pirosnak] Te Piroshoz mész vissza, aki mintha kinézett volna, mikor megjöttél.)  ([ajanlat_Pirosnak] Te visszamész Piroshoz, aki valamiért a bordáit fájlalja.)  Mi lészen?
 > * Dumázok neki a vadiúj spoileremről [14.oldal]
-> * Megkérdezem, gáznak érezné-e bevenni a farkam [12.oldal]
+> * [-ajanlat_Pirosnak] Megkérdezem, gáznak érezné-e bevenni a farkam {ajanlat_Pirosnak} [12.oldal]
 > * Felajánlom, hogy megmasszírozom [15.oldal]
 > * [vodka] Amúgy van nálam egy üveg vodka, nem akarjuk meginni? [52.oldal]
 
