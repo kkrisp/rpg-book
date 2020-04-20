@@ -303,6 +303,7 @@ class Oldal:
         es az igy generalt szoveget adja vissza"""
         r_szoveg = ""
         l_kar_szam = 0
+
         for i in range(len(self.felteteles_szoveg)):
             mehet = False
             if len(self.felteteles_szoveg[i].feltetel_ha_van) < 1:
@@ -317,14 +318,12 @@ class Oldal:
             if not mehet:
                 continue
                 
-            l_kar_szam = self.felteteles_szoveg[i].celoldal-1
+            l_kar_szam = self.felteteles_szoveg[i].celoldal
             r_szoveg = self.szoveg[:l_kar_szam].strip()
             r_szoveg += " " + self.felteteles_szoveg[i].szoveg.strip()
 
-        while self.szoveg[l_kar_szam] == " ":
-            l_kar_szam += 1
-            pass
         r_szoveg += " " + self.szoveg[l_kar_szam:]
+
         return r_szoveg
 
     def valaszlistat_general(self, p_meglevo_feltetelek):
@@ -359,7 +358,7 @@ class Konyv:
         self.oldalak[oldalszam].szoveg = szoveg
 
     def feltolt_faljbol(self, faljnev):
-        oldalt_olvas = False
+        l_oldalt_olvas = False
         valaszt_olvas = False
         szam = 0
         kf = open(faljnev, 'r')
@@ -369,13 +368,13 @@ class Konyv:
                     adatok = line.split('-')
                     szam = adatok[1]
                     self.kibovit(szam)
-                    oldalt_olvas = True
+                    l_oldalt_olvas = True
                     valaszt_olvas = False
                 elif line[1] == '>':
-                    oldalt_olvas = False
+                    l_oldalt_olvas = False
                     valaszt_olvas = True
             else:
-                if oldalt_olvas:
+                if l_oldalt_olvas:
                     self.oldalak[szam].szoveg = line
                 elif valaszt_olvas:
                     adat = line.split('[')
