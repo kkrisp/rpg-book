@@ -41,7 +41,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     l_osz = int(r_oldalszam)-1
     p_konyv.kibovit(l_osz)
     # a szoveg, ameddig a valaszok (>) vagy uj oldal (#) nem jon
-    p_konyv.oldalak[l_osz].szoveg = ""
+    p_konyv[l_osz].szoveg = ""
     l_betu = p_fajl.read(1)
     l_kar_szam = 0
     while l_betu:
@@ -63,13 +63,13 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
                     l_felteteles_szoveg += l_betu
             l_valasz = Valasz(l_felteteles_szoveg[:-1], l_kar_szam)
             l_valasz.felteteleket_hozzaad(l_feltetelek)
-            p_konyv.oldalak[l_osz].felteteles_szoveg.append(l_valasz)
+            p_konyv[l_osz].felteteles_szoveg.append(l_valasz)
             # ------ paste vege
         else:
-            p_konyv.oldalak[l_osz].szoveg += l_betu
+            p_konyv[l_osz].szoveg += l_betu
         l_kar_szam += 1
         l_betu = p_fajl.read(1)
-    p_konyv.oldalak[l_osz].szoveg = p_konyv.oldalak[l_osz].szoveg.strip()
+    p_konyv[l_osz].szoveg = p_konyv[l_osz].szoveg.strip()
     # valaszok beolvasasa, ha vannak
     while l_betu == ">":
         l_valasz_buffer = Valasz()
@@ -110,7 +110,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
                 l_betu = p_fajl.read(1)
                 if l_betu.isdigit() or l_betu == "-": l_szam_buffer += l_betu
             l_valasz_buffer.celoldal = int(l_szam_buffer)
-        p_konyv.oldalak[l_osz].valaszok.append(l_valasz_buffer)
+        p_konyv[l_osz].valaszok.append(l_valasz_buffer)
         while l_betu not in speckar:
             l_betu = p_fajl.read(1)
             pass
@@ -151,14 +151,14 @@ def beolvas(faljnev, konyv, max_oldalszam=100):
                 k = f.read(1)
 
         elif k == ">":  # valasz beolvasasanak kezdete
-            konyv.oldalak[int(oldalszam) - 1] = oldal_buffer
-            konyv.oldalak[int(oldalszam) - 1].valaszok.append(valasz_buffer)
+            konyv[int(oldalszam) - 1] = oldal_buffer
+            konyv[int(oldalszam) - 1].valaszok.append(valasz_buffer)
             valasz_buffer = Valasz()
             oldal_buffer = Oldal()
             oldal_buffer.szoveg = ""
             listaszamlalo = 0
             if read_mode == 6:
-                konyv.oldalak[int(oldalszam) - 1].valaszok.append(valasz_buffer)
+                konyv[int(oldalszam) - 1].valaszok.append(valasz_buffer)
             read_mode = 6  # valasz beolvasasa
             continue
 
@@ -227,7 +227,7 @@ def beolvas(faljnev, konyv, max_oldalszam=100):
         if read_mode == 10:
             if ide_vezet == "":
                 ide_vezet = "-1"
-            konyv.oldalak[int(oldalszam)-1].valasz_hozzaadasa(valasz_szoveg, int(ide_vezet), feltetelek, jutalmak)
+            konyv[int(oldalszam)-1].valasz_hozzaadasa(valasz_szoveg, int(ide_vezet), feltetelek, jutalmak)
             valasz_szoveg = ""
             ide_vezet = 0
             feltetelek = []
@@ -344,18 +344,18 @@ class Oldal:
         return r_lista
 
 
-class Konyv:
+class Konyv(list):
     def __init__(self):
         self.cim = "Nevtelen kaland"
-        self.oldalak = []
+        list.__init__(self)
 
-    def kibovit(self, oldalszam):
-        while oldalszam >= len(self.oldalak):
-            self.oldalak.append(Oldal())
+    def kibovit(self, legnagyobb_oldalszam):
+        while legnagyobb_oldalszam >= len(self):
+            self.append(Oldal())
 
     def oldal_hozzaadd(self, oldalszam, szoveg):
         self.kibovit(oldalszam)
-        self.oldalak[oldalszam].szoveg = szoveg
+        self[oldalszam].szoveg = szoveg
 
     def feltolt_faljbol(self, faljnev):
         l_oldalt_olvas = False
@@ -375,11 +375,11 @@ class Konyv:
                     valaszt_olvas = True
             else:
                 if l_oldalt_olvas:
-                    self.oldalak[szam].szoveg = line
+                    self[szam].szoveg = line
                 elif valaszt_olvas:
                     adat = line.split('[')
                     szoveg = adat[0]
                     adat = adat[1].split(']')
                     valaszok = adat[0].split('/')
                     cel = int(adat[1][1:])
-                    self.oldalak[szam].valasz_hozzaadasa(szoveg, cel, valaszok)
+                    self[szam].valasz_hozzaadasa(szoveg, cel, valaszok)

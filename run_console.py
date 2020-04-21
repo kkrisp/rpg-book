@@ -109,7 +109,7 @@ class KalandKonyvMegjelenito(urwid.AttrWrap):
             urwid.Text("Nincsenek valaszok.")
         ]
         urwid.AttrMap.__init__(self, urwid.Pile(jelenet), 'szoveg')
-        self.oldalt_betolt(self.alapkonyv.oldalak[self.jelen_oldal])
+        self.oldalt_betolt(self.alapkonyv[self.jelen_oldal])
 
     def oldalt_betolt(self, p_konyv_oldal):
         szoveg = p_konyv_oldal.szoveget_general(g_hatizsak)
@@ -130,7 +130,7 @@ class KalandKonyvMegjelenito(urwid.AttrWrap):
         self.jelen_oldal = celoldal-1
         if celoldal < 0:
             raise urwid.ExitMainLoop()
-        self.oldalt_betolt(self.alapkonyv.oldalak[self.jelen_oldal])
+        self.oldalt_betolt(self.alapkonyv[self.jelen_oldal])
 
 
 # ------------ Program az osztalyok felhasznalasaval ------------
@@ -151,7 +151,7 @@ for i in range(len(g_kaland_lista)):
 kaland_elonezetek = []
 for l_kaland in g_kaland_lista:
     kaland_elonezetek.append(
-        KalandElonezet(l_kaland[1].cim, l_kaland[1].oldalak[0].szoveg, l_kaland[0])
+        KalandElonezet(l_kaland[1].cim, l_kaland[1][0].szoveg, l_kaland[0])
     )
 
 
