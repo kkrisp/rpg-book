@@ -53,24 +53,25 @@ class GlobalisAdat:
 
 
 class ArnyekosAblak(urwid.Overlay):
-    def __init__(self, p_tartalom, p_szelesseg = 100, p_magassag=30):
+    def __init__(self, p_tartalom, p_szelesseg=100, p_magassag=30, padding=2):
+        tartalom = urwid.Padding(p_tartalom,  left=padding, right=padding, min_width=20)
         hatter = urwid.AttrWrap(urwid.SolidFill(u"\u2592"), 'screen edge')
         arnyek = urwid.AttrWrap(urwid.SolidFill(u" "), 'main shadow')
         hatter = urwid.Overlay(arnyek, hatter,
             'center', p_szelesseg, 'middle', p_magassag, left=4, top=2)
-        urwid.Overlay.__init__(self, p_tartalom, hatter,
-            'center', p_szelesseg, 'middle', p_magassag, min_width=50, min_height=20)
+        urwid.Overlay.__init__(self, tartalom, hatter,
+            'center', p_szelesseg, 'middle', p_magassag, min_width=20, min_height=10)
 
 
 class KalandElonezet(urwid.LineBox):
-    def __init__(self, p_cim, p_elonezet, p_faljnev, p_cim_magassag=2, p_demo_magassag=4, p_szelesseg=30):
+    def __init__(self, p_cim, p_elonezet, p_faljnev):
         self.faljnev = p_faljnev
         kivalasztas_gomb = urwid.Button(p_cim, self.kivalaszt)
         tartalom = urwid.Pile([
-            (p_cim_magassag, urwid.Filler(kivalasztas_gomb, valign='top')),
+            (2, urwid.Filler(kivalasztas_gomb, valign='top')),
             urwid.Divider("-", 0, 0),
-            (p_demo_magassag, urwid.Filler(
-                urwid.Text(lerovidit(p_elonezet, p_demo_magassag, p_szelesseg)),
+            (4, urwid.Filler(
+                urwid.Text(lerovidit(p_elonezet, 4, 30)),
                 valign='top'))
         ])
         urwid.LineBox.__init__(self, tartalom)
@@ -78,6 +79,7 @@ class KalandElonezet(urwid.LineBox):
     def kivalaszt(self, p_button):
         g_valsztott_kaland.set(self.faljnev)
         raise urwid.ExitMainLoop()
+
 
 class ValaszGomb(urwid.Button):
     def __init__(self, p_oldal, szoveg="Ures valasz", celoldal=-1, p_jutalom=None):
@@ -96,8 +98,10 @@ class ValaszGomb(urwid.Button):
         self.oldal.lapoz(g_jelenlegi_oldal.get())
 
 
-class KalandKonyvOldal(urwid.AttrWrap):
-    def __init__(self, elso_oldal=1):
+class KalandKonyvMegjelenito(urwid.AttrWrap):
+    def __init__(self, alapkonyv, elso_oldal=1):
+        self.alapkonyv = alapkonyv
+        self.jelen_oldal = elso_oldal-1
         jelenet = [
             urwid.Divider(),
             urwid.Text("Ures oldal"),
@@ -105,7 +109,7 @@ class KalandKonyvOldal(urwid.AttrWrap):
             urwid.Text("Nincsenek valaszok.")
         ]
         urwid.AttrMap.__init__(self, urwid.Pile(jelenet), 'szoveg')
-        self.lapoz(elso_oldal)
+        self.oldalt_betolt(self.alapkonyv.oldalak[self.jelen_oldal])
 
     def oldalt_betolt(self, p_konyv_oldal):
         szoveg = p_konyv_oldal.szoveget_general(g_hatizsak)
@@ -123,9 +127,10 @@ class KalandKonyvOldal(urwid.AttrWrap):
         self.original_widget = urwid.Pile(jelenet + l_valaszlehetosegek)
 
     def lapoz(self, celoldal):
+        self.jelen_oldal = celoldal-1
         if celoldal < 0:
             raise urwid.ExitMainLoop()
-        self.oldalt_betolt(megnyitott_konyv.oldalak[celoldal-1])
+        self.oldalt_betolt(self.alapkonyv.oldalak[self.jelen_oldal])
 
 
 # ------------ Program az osztalyok felhasznalasaval ------------
@@ -146,15 +151,15 @@ for i in range(len(g_kaland_lista)):
 kaland_elonezetek = []
 for l_kaland in g_kaland_lista:
     kaland_elonezetek.append(
-        KalandElonezet(l_kaland[1].cim, l_kaland[1].oldalak[0].szoveg, l_kaland[0], 2, 4, 32)
+        KalandElonezet(l_kaland[1].cim, l_kaland[1].oldalak[0].szoveg, l_kaland[0])
     )
 
 
 fomenu_tartalom = [
     urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
-    urwid.Padding(urwid.Text(g_program_info, align='center'), left=2, right=2, min_width=20),
+    urwid.Text(g_program_info, align='center'),
     urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
-    urwid.Padding(urwid.Text(("szoveg", u"Valaszthato kalandok")), left=2, right=2, min_width=20),
+    urwid.Text(("szoveg", u"Valaszthato kalandok")),
     urwid.Divider(),
     urwid.Padding(
         urwid.GridFlow(kaland_elonezetek, 35, 1, 0, 'left'),
@@ -165,10 +170,8 @@ fomenu_tartalom = [
 g_valsztott_kaland = GlobalisAdat("Nincs")
 fejlec = urwid.AttrWrap(urwid.Text(g_fejlec_tartalom), 'fejlec')
 fomenu = ArnyekosAblak(
-    urwid.Padding(
-        urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)),
-        left=4, right=4, min_width=20),
-    86, 33)
+    urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)), 86, 33, 4
+)
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
 
 kaland_valasztas = urwid.MainLoop(frame, formazas, unhandled_input=kilepes)
@@ -182,7 +185,7 @@ g_jelenlegi_oldal = GlobalisAdat(0)
 g_hatizsak = []
 
 
-fomenu_tartalom = [urwid.Padding(KalandKonyvOldal(), left=4, right=3, min_width=20)]
+fomenu_tartalom = [urwid.Padding(KalandKonyvMegjelenito(megnyitott_konyv), left=4, right=3, min_width=20)]
 fejlec = urwid.AttrWrap(urwid.Text(g_fejlec_tartalom), 'fejlec')
 fomenu = ArnyekosAblak(urwid.ListBox(urwid.SimpleListWalker(fomenu_tartalom)), 86, 33)
 frame = urwid.Frame(urwid.AttrWrap(fomenu, 'szoveg'), header=fejlec)
