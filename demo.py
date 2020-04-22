@@ -7,23 +7,92 @@ from datetime import datetime # for dating logfileElmenti a jatek ideje
 import argparse
 import curses # for visual commands
 #import getch
+import karakter as kar
+import konyv as konyv_kalandokhoz
 
 # arguments
 argParser = argparse.ArgumentParser(description="Kaland es kockazat!")
-argParser.add_argument('--log', "-l",
+argParser.add_argument("-l", "--log",
                         action="store_true",
                         default=False,
-                        help='Does nothing yet.')
+                        help='Megjegyzi a karakter valasztasait. (ez a funkcio meg nem mukodik)')
+argParser.add_argument("-d", "--developer",
+                        action="store_true",
+                        default=False,
+                        help='Fejlesztoi mod: oldalak szabad valtasa, extra infok megjelenitese.')
 args = argParser.parse_args()
 buttons = [
     "PRINT GRID",
     "SAVE GCODE"
 ]
 
-def draw_layout(screen, x0, y0, fileName):
-        layout = open(fileName, 'r')
-        screen.addstr(x0, y0, layout.read())
-        layout.close()
+valasz_betuk = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]  # a valaszok betujele
+
+
+def szoveget_kiir(kepernyo, szoveg, x0, y0, maxhossz=80):
+    sorszam = 0
+    l_hossz = 0
+    kiirando = ""
+    for betu in szoveg:
+        if betu == "\n" or l_hossz > maxhossz:
+            if betu != "\n":
+                kiirando += betu
+            kepernyo.addstr(x0+sorszam, y0, kiirando)
+            kiirando = ""
+            l_hossz = 0
+            sorszam += 1
+        else:
+            kiirando += betu
+        l_hossz += 1
+    kepernyo.addstr(x0+sorszam, y0, kiirando)
+
+
+def sorokra_bont(szoveg):
+    sor = ""
+    bontott = []
+    for k in szoveg:
+        if k == "\n":
+            bontott.append(sor)
+            sor = ""
+        else:
+            sor += k
+    return bontott
+
+def hatteret_feltolt(fajlnev, hatter):
+    hatter_fajl = open(fajlnev, 'r')
+    for sor in hatter_fajl:
+        hatter.append(sor)  # minden sor vegerol eltavolitva a newline karakter
+    hatter_fajl.close()
+
+
+def hatter_rajzolasa(kepernyo, hatter, x_pos=0, y_pos=0):
+    x_szamlalo = 0
+    for sor in hatter:
+        kepernyo.addstr(x_pos + x_szamlalo, y_pos, sor)
+        x_szamlalo += 1
+
+
+def hatter_rajzolasa_kozepre(kepernyo, hatter):
+    x_max, y_max = stdscr.getmaxyx()  # get size of the screen
+    hatter_szelesseg = len(hatter[0])
+    hatter_magassag = len(hatter)
+    x_pos = int((x_max-hatter_magassag)/2)
+    y_pos = int((y_max-hatter_szelesseg)/2)
+    x_szamlalo = 0
+    if hatter_magassag > x_max:
+        print("nem eleg magas kepernyo")
+    for sor in hatter:
+        kepernyo.addstr(x_pos + x_szamlalo, y_pos, sor)
+        x_szamlalo += 1
+
+
+def hatter_szoveg_kordinata(kepernyo, hatter, x_belul=0, y_belul=0):
+    x_max, y_max = stdscr.getmaxyx()  # get size of the screen
+    hatter_szelesseg = len(hatter[0])
+    hatter_magassag = len(hatter)
+    x_pos = int((x_max-hatter_magassag)/2) + x_belul
+    y_pos = int((y_max-hatter_szelesseg)/2) + y_belul
+    return x_pos, y_pos
 
 def draw_list(screen, x0, y0, elements, highlight, spacing=1, refresh=True):
     """Writes out list elements to the screen, highlights the ones
@@ -70,59 +139,85 @@ def selection_handler(nextIndex, listLength):
     if nextIndex >= 0: return nextIndex % listLength
     else: return listLength+nextIndex # if the index goes negative
 
-def value_changer(value, changeBy):
-    """Inverts booleans, does not allow ints and floats be smaller than 0"""
-    if type(value) is bool: return not value
-    
-    #'changeBy' is usually 1 or -1, floats are altered in smaller steps
-    elif type(value) is int:
-        if (value+changeBy) > 0 : return value + changeBy
-        else: return 0
-    else:
-        changeBy = changeBy*0.1
-        if (value+changeBy) > 0.0 : return value + changeBy
-        else: return 0.0
+def ertekvaltoztato(ertek, valtoztatas, maxertek):
+    kimeno_ertek = ertek + valtoztatas
+    if kimeno_ertek > maxertek:
+        kimeno_ertek = 0+valtoztatas
+    elif kimeno_ertek < 1:
+        kimeno_ertek = maxertek + valtoztatas + 1
+    return kimeno_ertek
 
-def position_submenu(screen, x0, y0):
-    screen.addstr(x0, y0,   "+-----------------------------+")
-    screen.addstr(x0+1, y0, "| +-------------------------+ |")
-    screen.addstr(x0+2, y0, "| |   GO   | RESET | CANCEL | |")
-    screen.addstr(x0+3, y0, "| |  (g)   |  (r)  |  (c)   | |")
-    screen.addstr(x0+4, y0, "| +-------------------------+ |")
-    screen.addstr(x0+5, y0, "+-----------------------------+")
-    while 1:
-        c = screen.getch()
-        if c == ord('g'):
-            return 1
-        elif c == ord('r'):
-            return 2
+
+def karakterlapot_rajzol(kepernyo, karakter_in, x_pos=0, y_pos=0):
+    nevsor = karakter_in.nev
+    sorhossz = 22 + 2
+    alahuzas = "-" * sorhossz
+    sorszam = 0
+    kepernyo.addstr(x_pos+sorszam, y_pos, nevsor)
+    sorszam += 1
+    kepernyo.addstr(x_pos+sorszam, y_pos, alahuzas)
+    sorszam += 1
+    eletero_sor = "  eletero          " + str(karakter_in.eletero) + "/" + str(karakter_in.max_eletero)
+    kepernyo.addstr(x_pos+sorszam, y_pos, eletero_sor)
+    sorszam += 1
+    for tul in karakter_in.tulajdonsagok.keys():
+        #alahuzas = " -" + "-" * sorhossz
+        szunetek = (sorhossz - len(tul) - 7) * " "
+        #tulajdonsagsor = " | " + tul + szunetek + "| " + str(karakter_in.tulajdonsagok[tul]) + " |"
+        tulajdonsagsor = "  " + tul + szunetek + " " + str(karakter_in.tulajdonsagok[tul])
+        kepernyo.addstr(x_pos+sorszam, y_pos, tulajdonsagsor)
+        sorszam += 1
+        #kepernyo.addstr(x_pos+sorszam, y_pos, alahuzas)
+        #sorszam += 1
+    x_pos = x_pos + 15
+    sorszam = 0
+    kepernyo.addstr(x_pos+sorszam, y_pos, "Targyak:         ")
+    sorszam += 1
+    for targy in karakter_in.targyak:
+        kepernyo.addstr(x_pos+sorszam, y_pos, "  " + targy)
+        sorszam += 1
+
+
+def valasztasokat_kiir(kepernyo, valasz_lista, x0, y0, valasztott=1, szelesseg = 80):
+    cnt = 0
+    kijeloles = 1
+    for val in valasz_lista:
+        ki = valasz_betuk[cnt] + ") "
+        n = 0
+        for betu in val.szoveg:
+            n += 1
+            if betu == "\n" or n >= szelesseg:
+                if betu != "\n":
+                    ki += betu
+                if kijeloles == valasztott:
+                    kepernyo.addstr(x0 + cnt, y0, ki, curses.A_REVERSE)
+                else:
+                    kepernyo.addstr(x0 + cnt, y0, ki)
+                ki = "   "
+                cnt += 1
+                n = 0
+            else:
+                ki += betu
+        if kijeloles == valasztott:
+            kepernyo.addstr(x0 + cnt, y0, ki, curses.A_REVERSE)
         else:
-            return 0
+            kepernyo.addstr(x0 + cnt, y0, ki)
+        cnt += 1
+        kijeloles += 1
 
-def value_from_user(screen, x0, y0, maxLength):
-    """Gets a string from the user. Generates a 'write there' field
-    at the given place with the length of the maximum available input length."""
-    curses.echo()
-    screen.addstr(x0, y0, ("_"*(maxLength+1)))
-    s = screen.getstr(x0, y0+1, maxLength)
-    curses.noecho()
-    return s
 
-def get_adventure_titles():
-    title_list = []
-    for file in os.listdir("./"):
-        if file.split('.')[1] == "adv":
-            title = ""
-            for line in open(file, 'r'):
-                words = line.split(' ')
-                if words[0] == "TITLE":
-                    for w in range(1, len(words)-1):
-                        title += words[w] + " "
-                    title += words[len(words)-1].split("\n")[0]
-                    break
-            title_list.append(title)
-    return title_list
+foszereplo = kar.Karakter()
+foszereplo.nev = "Veer Istvan"
+foszereplo.targyak.append("Alma")
+foszereplo.targyak.append("Gyogyito ital")
+foszereplo.targyak.append("Kotel")
 
+egyszeru_hatter = []
+hatteret_feltolt("jelenet_hatter.txt", egyszeru_hatter)
+
+debug_mode = args.developer
+
+# itt kezdodik a curses ablak
 stdscr = curses.initscr() # returns a window object
 curses.noecho()           # turns off automatic echoing keys to the screen
 curses.cbreak()           # reacting to keypresses without pressing enter
@@ -131,29 +226,98 @@ stdscr.keypad(1)          # arrowkeys, etc are registered too
 maxx, maxy = stdscr.getmaxyx()  # get size of the screen
 curses.curs_set(0)              # set cursor out of the screen
 
-welcome_text = "Valaszthato kalandok:"
-available_adventures = get_adventure_titles()
-currentlySelected = 0
-maxindex = len(available_adventures)
+k = konyv_kalandokhoz.Konyv()
+konyv_kalandokhoz.beolvas("kalandok/BekeX_csajozos.md", k)
+kepernyore = ""  # a szoveg, amit az addstr paranccsal kinyomtatunk
+nagy_szoveg = []
+valaszlista = []  # valaszok listaja nyomtatashoz
+jelenlegi_oldalszam = 1
+jelenlegi_valasz = 1
 
+c = ""
+c_elozo = ""
+
+currentlySelected = 0
+szoveg_x, szoveg_y = hatter_szoveg_kordinata(stdscr, egyszeru_hatter, 3, 4)
+aktiv_karakterlap = False
 try:
     while 1:
-        stdscr.addstr(maxx/4, int(maxy/2-len(welcome_text)/2), welcome_text)
-        draw_list(stdscr, maxx/4+1, int(maxy/2-len(welcome_text)/2), available_adventures, currentlySelected)
+        # megjeleno elemek
+        for i in range(20):
+            stdscr.addstr(i, 0, " "*100)
+        osz = jelenlegi_oldalszam-1  # a termeszetes oldalszamozas miatt... igy mar tombindex
+        nagy_szoveg = sorokra_bont(k.oldalak[osz].szoveg)
+        hatter_rajzolasa_kozepre(stdscr, egyszeru_hatter)
+        if jelenlegi_oldalszam < 0:
+            stdscr.addstr(szoveg_x+6, szoveg_y+36, "A jateknak vege!")
+            stdscr.addstr(szoveg_x+8, szoveg_y+29, "A kilepeshez nyomj meg egy gombot!")
+            c = stdscr.getch()
+            break
+        elif aktiv_karakterlap:
+            karakterlapot_rajzol(stdscr, foszereplo, szoveg_x, szoveg_y)
+        else:
+            szoveget_kiir(stdscr, k.oldalak[osz].szoveg, szoveg_x, szoveg_y)
+            valasztasokat_kiir(stdscr, k.oldalak[osz].valaszok, szoveg_x+15, szoveg_y, jelenlegi_valasz)
+        if debug_mode:
+            l_i = 1
+            debug_text = "[n]<<oldal>>[m]"
+            stdscr.addstr(l_i, 2, debug_text)
+            l_i += 1
+            debug_text = "oldal: " + str(jelenlegi_oldalszam)
+            stdscr.addstr(l_i, 2, debug_text)
+            l_i += 1
+            debug_text = "valasz: " + str(jelenlegi_valasz)
+            stdscr.addstr(l_i, 2, debug_text)
+            l_i -= 1
+            debug_text = "a jelenlegi valasz:"
+            stdscr.addstr(l_i, 20, debug_text)
+            if len(k.oldalak[osz].valaszok) < 1:
+                l_i += 1
+                debug_text = "   ezen az oldalon nincsenek valaszlehetosegek"
+                stdscr.addstr(l_i, 20, debug_text)
+            else:
+                l_i += 1
+                debug_text = "   ide vezet: " + str(k.oldalak[osz].valaszok[jelenlegi_valasz-1].celoldal)
+                stdscr.addstr(l_i, 20, debug_text)
+                l_i += 1
+                debug_text = "   lathato, ha van: " + str(k.oldalak[osz].valaszok[jelenlegi_valasz-1].feltetel_ha_van)
+                stdscr.addstr(l_i, 20, debug_text)
+                l_i += 1
+                debug_text = "   lathato, ha nincs: " + str(k.oldalak[osz].valaszok[jelenlegi_valasz-1].feltetel_ha_nincs)
+                stdscr.addstr(l_i, 20, debug_text)
+                l_i += 1
+
+        # akciok kiadasa
         c = stdscr.getch()
         # exit program
-        if c == ord('q'):
-            if args.log: lf.write(logf('q'))
+        if c == ord('q') or c == ord('Q'):
             break  # Exit the while()
 
         # navigating the menu
         elif c == curses.KEY_UP:
-            if args.log: lf.write(logf("UP"))
-            currentlySelected = selection_handler(currentlySelected-1, maxindex)
+            jelenlegi_valasz = ertekvaltoztato(jelenlegi_valasz, -1, len(k.oldalak[osz].valaszok))
         elif c == curses.KEY_DOWN:
-            if args.log: lf.write(logf("DOWN"))
-            currentlySelected = selection_handler(currentlySelected+1, maxindex)
-            
+            jelenlegi_valasz = ertekvaltoztato(jelenlegi_valasz, +1, len(k.oldalak[osz].valaszok))
+        elif c == curses.KEY_LEFT:
+            pass
+        elif c == curses.KEY_RIGHT:
+            pass
+        elif c == ord('\n'):
+            jelenlegi_oldalszam = k.oldalak[osz].valaszok[jelenlegi_valasz-1].celoldal
+            jelenlegi_valasz = 1
+
+        # karakterlap
+        elif c == ord('c') or c == ord('C'):
+            aktiv_karakterlap = not aktiv_karakterlap
+
+        elif debug_mode:
+            if c == ord('n') or c == ord('N'):
+                jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, -1, len(k.oldalak))
+                jelenlegi_valasz = 1
+            elif c == ord('m') or c == ord('M'):
+                jelenlegi_oldalszam = ertekvaltoztato(jelenlegi_oldalszam, +1, len(k.oldalak))
+                jelenlegi_valasz = 1
+
 except: # closes the functions properly in case of error
     curses.nocbreak()
     stdscr.keypad(0)
@@ -170,6 +334,7 @@ curses.echo()
 curses.endwin()
 sys.exit()
 
+# ez itt lent csak peldak ezkoztara
 try:
     while False:
         maxindex = 16 + lb + len(myPositions)+1
