@@ -44,8 +44,10 @@ def lerovidit(szoveg, sorok, sorhossz):
 class GlobalisAdat:
     def __init__(self, p_eredeti_ertek):
         self.ertek = p_eredeti_ertek
+
     def get(self):
         return self.ertek
+
     def set(self, p_uj_ertek):
         self.ertek = p_uj_ertek
 
@@ -55,10 +57,10 @@ class ArnyekosAblak(urwid.Overlay):
         tartalom = urwid.Padding(p_tartalom,  left=padding, right=padding, min_width=20)
         hatter = urwid.AttrWrap(urwid.SolidFill(u"\u2592"), 'screen edge')
         arnyek = urwid.AttrWrap(urwid.SolidFill(u" "), 'main shadow')
-        hatter = urwid.Overlay(arnyek, hatter,
-            'center', p_szelesseg, 'middle', p_magassag, left=4, top=2)
-        urwid.Overlay.__init__(self, tartalom, hatter,
-            'center', p_szelesseg, 'middle', p_magassag, min_width=20, min_height=10)
+        hatter = urwid.Overlay(
+            arnyek, hatter, 'center', p_szelesseg, 'middle', p_magassag, left=4, top=2)
+        urwid.Overlay.__init__(self,
+            tartalom, hatter, 'center', p_szelesseg, 'middle', p_magassag, min_width=20, min_height=10)
 
 
 class KalandElonezet(urwid.LineBox):
@@ -68,9 +70,7 @@ class KalandElonezet(urwid.LineBox):
         tartalom = urwid.Pile([
             (2, urwid.Filler(kivalasztas_gomb, valign='top')),
             urwid.Divider("-", 0, 0),
-            (4, urwid.Filler(
-                urwid.Text(lerovidit(p_elonezet, 4, 30)),
-                valign='top'))
+            (4, urwid.Filler(urwid.Text(lerovidit(p_elonezet, 4, 30)), valign='top'))
         ])
         urwid.LineBox.__init__(self, tartalom)
 
@@ -137,7 +137,6 @@ class KalandKonyvMegjelenito(urwid.AttrWrap):
 
 
 # ------------ Program az osztalyok felhasznalasaval ------------
-
 g_program_info = "\
 RPG-BOOK szoveges kalandjatek szimulator\n\
 Version 2.1\n\
@@ -150,7 +149,6 @@ for i in range(len(g_kaland_lista)):
     g_kaland_lista[i] = (g_kaland_lista[i], konyv.Konyv())
     konyv.beolvas("kalandok/" + g_kaland_lista[i][0], g_kaland_lista[i][1], max_oldalszam=2)
 
-
 kaland_elonezetek = []
 for l_kaland in g_kaland_lista:
     kaland_elonezetek.append(
@@ -158,7 +156,6 @@ for l_kaland in g_kaland_lista:
             KalandElonezet(l_kaland[1].cim, l_kaland[1][0].szoveg, l_kaland[0]),
             None, focus_map="kivalasztott")
     )
-
 
 fomenu_tartalom = [
     urwid.Divider("-", 1, 1),
@@ -188,7 +185,6 @@ megnyitott_konyv = konyv.Konyv()
 konyv.beolvas("kalandok/" + g_valsztott_kaland.get(), megnyitott_konyv)
 g_jelenlegi_oldal = GlobalisAdat(0)
 g_hatizsak = []
-
 
 fomenu_tartalom = [urwid.Padding(KalandKonyvMegjelenito(megnyitott_konyv), left=4, right=3, min_width=20)]
 fejlec = urwid.AttrWrap(urwid.Text(g_fejlec_tartalom), 'fejlec')
