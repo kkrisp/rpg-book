@@ -8,6 +8,9 @@
 #  6 - valasz szoveg
 #  7 - valasz celoldal
 
+g_fsz_helye = "x"   # ez jelzi a felteteles, beillesztendo szoveg helyet...
+                    # nem fontos milyen, karakter, csak EGY helyet foglaljon
+
 
 def listat_olvas(szoveg, elvalaszto=",", no_space=False):
     r_lista = []
@@ -28,10 +31,11 @@ def listat_olvas(szoveg, elvalaszto=",", no_space=False):
 
 
 def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
+    # egy oldal beolvasasa
     speckar = ["#", ">", "[", "{"]
     r_oldalszam = ""
     l_betu = p_elsokar
-    # az elso sor az oldalszam (es cim)
+    # az elso sor az oldalszam (es cim, de az nincs beolvasva)
     while l_betu and l_betu != "\n":
         if l_betu.isdigit() or l_betu == "-":
             r_oldalszam += l_betu
@@ -64,7 +68,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             l_valasz = Valasz(l_felteteles_szoveg[:-1], l_kar_szam)
             l_valasz.felteteleket_hozzaad(l_feltetelek)
             p_konyv[l_osz].felteteles_szoveg.append(l_valasz)
-            # ------ paste vege
+            p_konyv[l_osz].szoveg += g_fsz_helye
         else:
             p_konyv[l_osz].szoveg += l_betu
         l_kar_szam += 1
@@ -302,27 +306,23 @@ class Oldal:
         """"A meglevo feltetelek alapjan beilleszti vagy kihagyja a felteteles szovegeket
         es az igy generalt szoveget adja vissza"""
         r_szoveg = ""
-        l_kar_szam = 0
-
+        l_eddig = 0
+        l_ettol = 0
         for i in range(len(self.felteteles_szoveg)):
-            mehet = False
-            if len(self.felteteles_szoveg[i].feltetel_ha_van) < 1:
-                mehet = True
+            mehet = (len(self.felteteles_szoveg[i].feltetel_ha_van) < 1)
             for felt in p_meglevo_feltetelek:
                 if felt in self.felteteles_szoveg[i].feltetel_ha_van:
                     mehet = True
             for felt in p_meglevo_feltetelek:
                 if felt in self.felteteles_szoveg[i].feltetel_ha_nincs:
                     mehet = False
+            l_eddig = self.felteteles_szoveg[i].celoldal
+            r_szoveg += self.szoveg[l_ettol:l_eddig].strip()
+            l_ettol = l_eddig+1
+            if mehet:
+                r_szoveg += " " + self.felteteles_szoveg[i].szoveg.strip() + " "
 
-            if not mehet:
-                continue
-                
-            l_kar_szam = self.felteteles_szoveg[i].celoldal
-            r_szoveg = self.szoveg[:l_kar_szam].strip()
-            r_szoveg += " " + self.felteteles_szoveg[i].szoveg.strip()
-
-        r_szoveg += " " + self.szoveg[l_kar_szam:]
+        r_szoveg += self.szoveg[l_ettol:].strip()
 
         return r_szoveg
 

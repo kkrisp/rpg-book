@@ -4,12 +4,10 @@ import os
 
 betuk = {0: "a", 1: "b", 2: "c", 3: "d", 4: "e", 5: "f", 6: "g", 7: "h"}
 formazas = [
-    ('kivalasztott', 'standout', '', ''),
     ('szoveg', 'black', 'light gray', ''),
+    ('kivalasztott', 'white', 'dark gray', 'bold'),
     ('szoveg_cim', 'black', 'light gray', ''),
     ('kiemeles', 'dark blue', 'light gray', ('standout', 'underline')),
-    ('elvalaszto', 'black', 'light gray', ''),
-    ('szovegdoboz', 'black', 'dark red'),
     ('hatter', 'black', 'dark blue'),
     ('fejlec', 'white', 'dark red', 'bold')
 ]
@@ -105,7 +103,7 @@ class KalandKonyvMegjelenito(urwid.AttrWrap):
         jelenet = [
             urwid.Divider(),
             urwid.Text("Ures oldal"),
-            urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
+            urwid.Divider("-", 1, 1),
             urwid.Text("Nincsenek valaszok.")
         ]
         urwid.AttrMap.__init__(self, urwid.Pile(jelenet), 'szoveg')
@@ -117,11 +115,16 @@ class KalandKonyvMegjelenito(urwid.AttrWrap):
         jelenet = [
             urwid.Divider(),
             urwid.Text(szoveg),
-            urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto') ]
+            urwid.Divider("-", 1, 1)]
         l_valasz_szama = 0
         valaszl = []
         for l_v in valaszok:
-            valaszl.append(ValaszGomb(self, betuk[l_valasz_szama]+") "+l_v.szoveg, l_v.celoldal, l_v.jutalom))
+            valaszl.append(
+                urwid.AttrMap(
+                    ValaszGomb(self, betuk[l_valasz_szama]+") "+l_v.szoveg, l_v.celoldal, l_v.jutalom),
+                    None, focus_map="kivalasztott"
+                )
+            )
             l_valasz_szama += 1
         l_valaszlehetosegek = urwid.SimpleListWalker(valaszl)
         self.original_widget = urwid.Pile(jelenet + l_valaszlehetosegek)
@@ -151,14 +154,16 @@ for i in range(len(g_kaland_lista)):
 kaland_elonezetek = []
 for l_kaland in g_kaland_lista:
     kaland_elonezetek.append(
-        KalandElonezet(l_kaland[1].cim, l_kaland[1][0].szoveg, l_kaland[0])
+        urwid.AttrMap(
+            KalandElonezet(l_kaland[1].cim, l_kaland[1][0].szoveg, l_kaland[0]),
+            None, focus_map="kivalasztott")
     )
 
 
 fomenu_tartalom = [
-    urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
+    urwid.Divider("-", 1, 1),
     urwid.Text(g_program_info, align='center'),
-    urwid.AttrWrap(urwid.Divider("-", 1, 1), 'elvalaszto'),
+    urwid.Divider("-", 1, 1),
     urwid.Text(("szoveg", u"Valaszthato kalandok")),
     urwid.Divider(),
     urwid.Padding(
