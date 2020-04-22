@@ -21,8 +21,6 @@ Ahogy kilépsz az ajtón, még magadon érzed apád pillantását, tudod, hogy t
 
 ### 5. Oldal
 A lábad alig fér el a benzines kannától, és a nyakad cirógatja a hátsó ülésról előre ágaskodó műmájer baseball-ütő, de legalább itt vagy. Mi a stájz?
-A bevett gettós kézfogással köszöntöm Zsocát – tovább a 6-ra.
-Könyörgök Zsocának, hogy tisztuljunk innét, mielőtt a faterom szétnyirbálja a pofánkat az új Gillete-jével.
 > * A bevett gettós kézfogással köszöntöm Zsocát. [6.oldal]
 > * Könyörgök Zsocának, hogy tisztuljunk innét, mielőtt a faterom szétnyirbálja a pofánkat az új Gillete-jével. [7.oldal]
 
@@ -60,7 +58,7 @@ Amikor megkérdezed, nincs-e kedve hancúrozni egyet, annyira elkezd röhögni, 
 > * Scotty… ez valamiféle időörvény lehet! Miről beszél kapitány? Energiát!! [13.oldal]
 
 ### 13.oldal
-A nappaliban nagy az élet, megy a buli, valami erőgépről Megasound System nóták mennek sorban, a srácok kegyetlen kemény gettóreppernek érzik magukat mind, aztán lobogtatják a kezüket, mint a faágakat a szélben, vagy mi, a lányok meg nagyon élvezik a bulizásokat meg a zenéket, akkor is, ha mind szexista szövegvilágú, persze erről még semmit sem tudnak, még nem értek el az emancipálódás azon fokára, még csak jókat vihognak azon, hogy Dope-T hogyan erőlteti be a pajszert minden sunába, yo. Zsoca, a legjobb haverod Klári seggét csapkodja, aki viszonzásképpen folyamatosan lefingja, és nagyon jól elvannak, tele pofával röhögnek egymás képébe. ([vodka] Van nalad egy vodka.) ([-Piros_hazigazda, -ajanlat_Pirosnak] Te Piroshoz mész oda, akinek állítólag mindenki bejuthat a bugyijába.)  ([Piros_hazigazda, -ajanlat_Pirosnak] Te Piroshoz mész vissza, aki mintha kinézett volna, mikor megjöttél.)  ([ajanlat_Pirosnak] Te visszamész Piroshoz, aki valamiért a bordáit fájlalja.)  Mi lészen?
+A nappaliban nagy az élet, megy a buli, valami erőgépről Megasound System nóták mennek sorban, a srácok kegyetlen kemény gettóreppernek érzik magukat mind, aztán lobogtatják a kezüket, mint a faágakat a szélben, vagy mi, a lányok meg nagyon élvezik a bulizásokat meg a zenéket, akkor is, ha mind szexista szövegvilágú, persze erről még semmit sem tudnak, még nem értek el az emancipálódás azon fokára, még csak jókat vihognak azon, hogy Dope-T hogyan erőlteti be a pajszert minden sunába, yo. Zsoca, a legjobb haverod Klári seggét csapkodja, aki viszonzásképpen folyamatosan lefingja, és nagyon jól elvannak, tele pofával röhögnek egymás képébe.([-Piros_hazigazda, -ajanlat_Pirosnak] Te Piroshoz mész oda, akinek állítólag mindenki bejuthat a bugyijába.)  ([Piros_hazigazda, -ajanlat_Pirosnak] Te Piroshoz mész vissza, aki mintha kinézett volna, mikor megjöttél.)  ([ajanlat_Pirosnak] Te visszamész Piroshoz, aki valamiért a bordáit fájlalja.)  Mi lészen?
 > * Dumázok neki a vadiúj spoileremről [14.oldal]
 > * [-ajanlat_Pirosnak] Megkérdezem, gáznak érezné-e bevenni a farkam {ajanlat_Pirosnak} [12.oldal]
 > * Felajánlom, hogy megmasszírozom [15.oldal]

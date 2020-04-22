@@ -1,3 +1,7 @@
+# Kalandkonyveket kezelo 'Konyv' osztaly es a hozza tartozo fuggvenyek, alosztalyok.
+# A 'Konyv' osztaly a 'list' kibovitese. Feltoltheto egy megfelelo .md faljbol.
+# A 'Konyv' osztalyt indexelve oldalakat kapunk, amelyek szoveget es valaszokat tartalmaznak,
+# amiket egy masik programmal ki lehet iratni.
 
 g_fsz_helye = "x"   # ez jelzi a felteteles, beillesztendo szoveg helyet...
                     # nem fontos milyen, karakter, csak EGY helyet foglaljon
@@ -21,34 +25,31 @@ def listava_alakit(szoveg, elvalaszto=",", no_space=False):
     return r_lista
 
 
-def felteteleket_olvas(p_fajl, bezaro_jel="]"):           # feltetelek olvasasa a felteteles szoveghez
-    r_feltetelek = ""
+def felteteleket_olvas(p_fajl, bezaro_jel="]"):
+    l_feltetelek = ""                       # feltetelek string formaban, vesszovel elvalasztva
     l_betu = l_betu = p_fajl.read(1)
-    while l_betu and l_betu != bezaro_jel:     # feltetelek vege
-        r_feltetelek += l_betu
+    while l_betu and l_betu != bezaro_jel:  # feltetelek vege
+        l_feltetelek += l_betu
         l_betu = p_fajl.read(1)
-    r_feltetelek = listava_alakit(r_feltetelek, no_space=True)
-    return r_feltetelek
+    return listava_alakit(l_feltetelek, no_space=True)  # feltetel-string atalakitasa listava
 
 
-def felteteles_szoveget_olvas(p_fajl, p_hely_a_szovegben): # felteteles szoveg olvasasa
-    l_feltetelek = ""
-    l_szoveg = ""
+def felteteles_szoveget_olvas(p_fajl, p_hely_a_szovegben):
+    l_feltetelek = ""        # feltetelek listaja string formajaban, vesszovel elvalasztva
+    l_szoveg = ""            # felteteles szoveg
     l_betu = p_fajl.read(1)
     while l_betu and l_betu != ")":
-        if l_betu == "[":            # feltetelek olvasasa a felteteles szoveghez
+        if l_betu == "[":
             l_feltetelek = felteteleket_olvas(p_fajl)
-        # felteteles szoveg beolvasasanak vege, hozzaadas az oldalhoz (a felt. szov. 'Valasz' osztalyu)
         else:
             l_szoveg += l_betu
         l_betu = p_fajl.read(1)
-    r_felteteles_szoveg = Valasz(l_szoveg, p_hely_a_szovegben)
+    r_felteteles_szoveg = Valasz(l_szoveg, p_hely_a_szovegben)  # a felteteles szoveghez jo a 'Valasz' osztaly
     r_felteteles_szoveg.felteteleket_hozzaad(l_feltetelek)
     return r_felteteles_szoveg
 
 
 def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
-    # egy oldal beolvasasa
     speckar = ["#", ">", "[", "{"]
     r_oldalszam = ""
     l_betu = p_elsokar
@@ -66,13 +67,13 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     # a szoveg olvasasa ameddig a valaszok (>) vagy uj oldal (#) nem jon:
     p_konyv[l_osz].szoveg = ""
     l_betu = p_fajl.read(1)
-    l_kar_szam = 0
+    l_kar_szam = 0  # karakterek szamolasa a felteteles szovegek helyenek meghatarozasahoz
     while l_betu and l_betu != ">" and l_betu != "#":
-        if l_betu == "(":
+        if l_betu == "(":  # felteteles szovegresz
             l_felteteles_szoveg = felteteles_szoveget_olvas(p_fajl, l_kar_szam)
             p_konyv[l_osz].felteteles_szoveg.append(l_felteteles_szoveg)
             p_konyv[l_osz].szoveg += g_fsz_helye
-        else:  # a beolvasott szoveg sima szoveg...
+        else:              # rendes szovegresz
             p_konyv[l_osz].szoveg += l_betu
         l_kar_szam += 1
         l_betu = p_fajl.read(1)
@@ -102,10 +103,10 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             l_lista_buffer = felteteleket_olvas(p_fajl, bezaro_jel="}")
             l_valasz_buffer.jutalom = l_lista_buffer
             l_betu = "}"
-        while l_betu not in speckar:
-            pass
+        while l_betu not in ["#", ">", "["]:  # tovabblepes a kovetkezo spec karakterig
+            pass                              # ami vagy '#' = uj oldal \ '>' = uj valasz \ '[' = celoldal
             l_betu = p_fajl.read(1)
-        # celoldal beolvasasa
+        # celoldal szamanak beolvasasa
         if l_betu == "[":
             l_szam_buffer = ""
             while l_betu != "]":
@@ -116,7 +117,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
         while l_betu not in speckar:
             l_betu = p_fajl.read(1)
             pass
-    # oldal feltoltve...
+    # valaszok beolvasasanak vege
 
 
 def beolvas(faljnev, konyv, max_oldalszam=100):
