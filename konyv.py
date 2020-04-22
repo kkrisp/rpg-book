@@ -21,27 +21,29 @@ def listava_alakit(szoveg, elvalaszto=",", no_space=False):
     return r_lista
 
 
-def felteteleket_olvas(p_fajl):           # feltetelek olvasasa a felteteles szoveghez
+def felteteleket_olvas(p_fajl, bezaro_jel="]"):           # feltetelek olvasasa a felteteles szoveghez
     r_feltetelek = ""
-    l_betu = "0"
-    while l_betu != "]":     # feltetelek vege
-        l_betu = p_fajl.read(1)
+    l_betu = l_betu = p_fajl.read(1)
+    while l_betu and l_betu != bezaro_jel:     # feltetelek vege
         r_feltetelek += l_betu
-        r_feltetelek = listava_alakit(r_feltetelek, no_space=True)
+        l_betu = p_fajl.read(1)
+    r_feltetelek = listava_alakit(r_feltetelek, no_space=True)
     return r_feltetelek
 
 
-def felteteles_szoveget_olvas(p_fajl, p_oldal, p_hely_a_szovegben): # felteteles szoveg olvasasa
-    l_feltetelek = None
-    r_felteteles_szoveg = ""
-    l_betu = "0"
+def felteteles_szoveget_olvas(p_fajl, p_hely_a_szovegben): # felteteles szoveg olvasasa
+    l_feltetelek = ""
+    l_szoveg = ""
+    l_betu = p_fajl.read(1)
     while l_betu and l_betu != ")":
-        l_betu = p_fajl.read(1)
         if l_betu == "[":            # feltetelek olvasasa a felteteles szoveghez
             l_feltetelek = felteteleket_olvas(p_fajl)
         # felteteles szoveg beolvasasanak vege, hozzaadas az oldalhoz (a felt. szov. 'Valasz' osztalyu)
-        r_felteteles_szoveg = Valasz(r_felteteles_szoveg[:-1], p_hely_a_szovegben)
-        r_felteteles_szoveg.felteteleket_hozzaad(l_feltetelek)
+        else:
+            l_szoveg += l_betu
+        l_betu = p_fajl.read(1)
+    r_felteteles_szoveg = Valasz(l_szoveg, p_hely_a_szovegben)
+    r_felteteles_szoveg.felteteleket_hozzaad(l_feltetelek)
     return r_felteteles_szoveg
 
 
@@ -66,26 +68,11 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     l_betu = p_fajl.read(1)
     l_kar_szam = 0
     while l_betu and l_betu != ">" and l_betu != "#":
-        if l_betu == "(":                    # felteteles szoveg olvasasa
-            l_feltetelek = ""
-            l_felteteles_szoveg = ""
-            while l_betu != ")":
-                l_betu = p_fajl.read(1)
-                if l_betu == "[":            # feltetelek olvasasa a felteteles szoveghez
-                    l_feltetelek = ""
-                    l_betu = p_fajl.read(1)
-                    while l_betu != "]":     # feltetelek vege
-                        l_feltetelek += l_betu
-                        l_betu = p_fajl.read(1)
-                    l_feltetelek = listava_alakit(l_feltetelek, no_space=True)
-                else:
-                    l_felteteles_szoveg += l_betu
-            # felteteles szoveg beolvasasanak vege, hozzaadas az oldalhoz (a felt. szov. 'Valasz' osztalyu)
-            l_felteteles_szoveg = Valasz(l_felteteles_szoveg[:-1], l_kar_szam)
-            l_felteteles_szoveg.felteteleket_hozzaad(l_feltetelek)
+        if l_betu == "(":
+            l_felteteles_szoveg = felteteles_szoveget_olvas(p_fajl, l_kar_szam)
             p_konyv[l_osz].felteteles_szoveg.append(l_felteteles_szoveg)
             p_konyv[l_osz].szoveg += g_fsz_helye
-        else: # a beolvasott szoveg sima szoveg...
+        else:  # a beolvasott szoveg sima szoveg...
             p_konyv[l_osz].szoveg += l_betu
         l_kar_szam += 1
         l_betu = p_fajl.read(1)
@@ -93,18 +80,15 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     # valaszok beolvasasa, ha vannak
     while l_betu == ">":
         l_valasz_buffer = Valasz()
-        l_betu = p_fajl.read(3)  # ' * '
+        l_betu = p_fajl.read(3)  # valasz elott levo ' * ' beolvasasa
         l_betu = p_fajl.read(1)
         # feltetelek beolvasasa
         if l_betu == "[":
-            l_lista_buffer = ""
-            while l_betu != "]":
-                l_betu = p_fajl.read(1)
-                l_lista_buffer += l_betu
-            l_valasz_buffer.felteteleket_hozzaad(listava_alakit(l_lista_buffer[:-1], no_space=True))
+            l_feltetelek = felteteleket_olvas(p_fajl)
+            l_valasz_buffer.felteteleket_hozzaad(l_feltetelek)
             l_betu = p_fajl.read(1)
 
-        while l_betu == " " or l_betu == "]":
+        while l_betu == " ":  # space-k beolvasasa a valasz elejerol
             l_betu = p_fajl.read(1)
             pass
 
@@ -115,11 +99,9 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             l_betu = p_fajl.read(1)
         # jutalom beolvasasa
         if l_betu == "{":
-            l_lista_buffer = ""
-            while l_betu != "}":
-                l_betu = p_fajl.read(1)
-                l_lista_buffer += l_betu
-            l_valasz_buffer.jutalom = listava_alakit(l_lista_buffer[:-1], no_space=True)
+            l_lista_buffer = felteteleket_olvas(p_fajl, bezaro_jel="}")
+            l_valasz_buffer.jutalom = l_lista_buffer
+            l_betu = "}"
         while l_betu not in speckar:
             pass
             l_betu = p_fajl.read(1)
