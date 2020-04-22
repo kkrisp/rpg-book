@@ -1,18 +1,9 @@
-# read mode
-#  0 - nincs
-#  1 - kaland cim
-#  2 - fejezet cim
-#  3 - oldalszam/cim
-#  4 - oldal szoveg
-#  5 - valasz kriterium
-#  6 - valasz szoveg
-#  7 - valasz celoldal
 
 g_fsz_helye = "x"   # ez jelzi a felteteles, beillesztendo szoveg helyet...
                     # nem fontos milyen, karakter, csak EGY helyet foglaljon
 
 
-def listat_olvas(szoveg, elvalaszto=",", no_space=False):
+def listava_alakit(szoveg, elvalaszto=",", no_space=False):
     r_lista = []
     l_listaelem_buffer = ""
     for l_kar in szoveg:
@@ -30,46 +21,71 @@ def listat_olvas(szoveg, elvalaszto=",", no_space=False):
     return r_lista
 
 
+def felteteleket_olvas(p_fajl):           # feltetelek olvasasa a felteteles szoveghez
+    r_feltetelek = ""
+    l_betu = "0"
+    while l_betu != "]":     # feltetelek vege
+        l_betu = p_fajl.read(1)
+        r_feltetelek += l_betu
+        r_feltetelek = listava_alakit(r_feltetelek, no_space=True)
+    return r_feltetelek
+
+
+def felteteles_szoveget_olvas(p_fajl, p_oldal, p_hely_a_szovegben): # felteteles szoveg olvasasa
+    l_feltetelek = None
+    r_felteteles_szoveg = ""
+    l_betu = "0"
+    while l_betu and l_betu != ")":
+        l_betu = p_fajl.read(1)
+        if l_betu == "[":            # feltetelek olvasasa a felteteles szoveghez
+            l_feltetelek = felteteleket_olvas(p_fajl)
+        # felteteles szoveg beolvasasanak vege, hozzaadas az oldalhoz (a felt. szov. 'Valasz' osztalyu)
+        r_felteteles_szoveg = Valasz(r_felteteles_szoveg[:-1], p_hely_a_szovegben)
+        r_felteteles_szoveg.felteteleket_hozzaad(l_feltetelek)
+    return r_felteteles_szoveg
+
+
 def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
     # egy oldal beolvasasa
     speckar = ["#", ">", "[", "{"]
     r_oldalszam = ""
     l_betu = p_elsokar
-    # az elso sor az oldalszam (es cim, de az nincs beolvasva)
+    # az elso sor az oldalszam (es cim, de az nincs beolvasva):
     while l_betu and l_betu != "\n":
         if l_betu.isdigit() or l_betu == "-":
             r_oldalszam += l_betu
         l_betu = p_fajl.read(1)
+    # ha nem sikerult beolvasni az oldalszamot, nem olvassuk tovabb az oldalt:
     if r_oldalszam == "":
         return
+    # oldalszam a sikeres beolvasas utan - 1, mivel a lista 0-val kezdodik, a konyv lapjai 1-el
     l_osz = int(r_oldalszam)-1
     p_konyv.kibovit(l_osz)
-    # a szoveg, ameddig a valaszok (>) vagy uj oldal (#) nem jon
+    # a szoveg olvasasa ameddig a valaszok (>) vagy uj oldal (#) nem jon:
     p_konyv[l_osz].szoveg = ""
     l_betu = p_fajl.read(1)
     l_kar_szam = 0
-    while l_betu:
-        if l_betu == ">" or l_betu == "#":
-            break
-        elif l_betu == "(":
+    while l_betu and l_betu != ">" and l_betu != "#":
+        if l_betu == "(":                    # felteteles szoveg olvasasa
             l_feltetelek = ""
             l_felteteles_szoveg = ""
             while l_betu != ")":
                 l_betu = p_fajl.read(1)
-                if l_betu == "[":          # nyito zarojel: feltetelek a valaszhoz
+                if l_betu == "[":            # feltetelek olvasasa a felteteles szoveghez
                     l_feltetelek = ""
                     l_betu = p_fajl.read(1)
-                    while l_betu != "]":    # addig olvassuk, ameddig el nem erjuk a csuko zarojelet
+                    while l_betu != "]":     # feltetelek vege
                         l_feltetelek += l_betu
                         l_betu = p_fajl.read(1)
-                    l_feltetelek = listat_olvas(l_feltetelek, no_space=True)
+                    l_feltetelek = listava_alakit(l_feltetelek, no_space=True)
                 else:
                     l_felteteles_szoveg += l_betu
-            l_valasz = Valasz(l_felteteles_szoveg[:-1], l_kar_szam)
-            l_valasz.felteteleket_hozzaad(l_feltetelek)
-            p_konyv[l_osz].felteteles_szoveg.append(l_valasz)
+            # felteteles szoveg beolvasasanak vege, hozzaadas az oldalhoz (a felt. szov. 'Valasz' osztalyu)
+            l_felteteles_szoveg = Valasz(l_felteteles_szoveg[:-1], l_kar_szam)
+            l_felteteles_szoveg.felteteleket_hozzaad(l_feltetelek)
+            p_konyv[l_osz].felteteles_szoveg.append(l_felteteles_szoveg)
             p_konyv[l_osz].szoveg += g_fsz_helye
-        else:
+        else: # a beolvasott szoveg sima szoveg...
             p_konyv[l_osz].szoveg += l_betu
         l_kar_szam += 1
         l_betu = p_fajl.read(1)
@@ -85,7 +101,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             while l_betu != "]":
                 l_betu = p_fajl.read(1)
                 l_lista_buffer += l_betu
-            l_valasz_buffer.felteteleket_hozzaad(listat_olvas(l_lista_buffer[:-1], no_space=True))
+            l_valasz_buffer.felteteleket_hozzaad(listava_alakit(l_lista_buffer[:-1], no_space=True))
             l_betu = p_fajl.read(1)
 
         while l_betu == " " or l_betu == "]":
@@ -103,7 +119,7 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
             while l_betu != "}":
                 l_betu = p_fajl.read(1)
                 l_lista_buffer += l_betu
-            l_valasz_buffer.jutalom = listat_olvas(l_lista_buffer[:-1], no_space=True)
+            l_valasz_buffer.jutalom = listava_alakit(l_lista_buffer[:-1], no_space=True)
         while l_betu not in speckar:
             pass
             l_betu = p_fajl.read(1)
@@ -124,120 +140,46 @@ def oldalt_olvas(p_fajl, p_elsokar, p_konyv):
 def beolvas(faljnev, konyv, max_oldalszam=100):
     f = open(faljnev, 'r')  # 'md' kiterjesztesu fajl, ahonnan a kalandot beolvassuk
     k = "0"                 # a beolvasott karakter (a fajlt karakterenkent olvassuk)
-    #max_oldalszam = 100    # a maximalis beolvashato oldalak szama (memoria vedelme)
-    read_mode = 0           # olvasasi mod (lasd a kommentet a fuggveny felett)
-    oldal_buffer = Oldal()
-    valasz_buffer = Valasz()
-    konyv.cim = ""          # kaland cime - nullazas
-    oldalszam = 0           # buffer: jelenlegi oldalszam
-    valasz_szoveg = ""      # buffer: egy valasz szovege
-    ide_vezet = 1           # buffer: celoldal, ahova egy valasz vezet
-    feltetelek = []         # buffer: feltetelek listaja egy valaszhoz
-    jutalmak = []           # buffer: jutalmak listaja egy valaszhoz
-    listaszamlalo = 0
+    olvasasi_mod = 0        # olvasasi mod:
+                            # 0 - semmi
+                            # 1 - konyv cim
+                            # 2 - fejezet cim
+                            # 3 - oldal tartalma
+    konyv.cim = ""          # konyv cimenek uresre allitasa (eredetileg 'Uj kaland')
     l_oldal_olvasas_volt = False
     beolvasott_oldalak_szama = 0
 
     while k:  # ameddig el nem erjuk a file veget
-        k_elozo = k
         k = f.read(1)
 
         if k == "#":
             # '#' - konyv cim
             # '##' - fejezet cim/szam (meg nincs megoldva)
             # '###' - oldalszam
-            read_mode = 0
+            olvasasi_mod = 0
             if l_oldal_olvasas_volt:
                 l_oldal_olvasas_volt = False
-                read_mode = 1
+                olvasasi_mod = 1
             while k == "#":
-                read_mode += 1
+                olvasasi_mod += 1
                 k = f.read(1)
 
-        elif k == ">":  # valasz beolvasasanak kezdete
-            konyv[int(oldalszam) - 1] = oldal_buffer
-            konyv[int(oldalszam) - 1].valaszok.append(valasz_buffer)
-            valasz_buffer = Valasz()
-            oldal_buffer = Oldal()
-            oldal_buffer.szoveg = ""
-            listaszamlalo = 0
-            if read_mode == 6:
-                konyv[int(oldalszam) - 1].valaszok.append(valasz_buffer)
-            read_mode = 6  # valasz beolvasasa
-            continue
-
-        elif read_mode == 1:  # kaland cimenek beolvasasa
+        elif olvasasi_mod == 1:  # kaland cimenek beolvasasa
             # kaland cim - majd kesobb
             konyv.cim += k
 
-        elif read_mode == 2:
-            # fejezet cim beolvasasa- majd kesobb
+        elif olvasasi_mod == 2:
+            # fejezet cim beolvasasa - meg nincs implementalva
             continue
 
-        elif read_mode == 3:  # uj oldal
+        elif olvasasi_mod == 3:  # uj oldal beolvasasa
             if beolvasott_oldalak_szama > max_oldalszam:
                 break
             oldalt_olvas(f, k, konyv)
             l_oldal_olvasas_volt = True
             beolvasott_oldalak_szama += 1
 
-        elif read_mode == 4:  # oldal szovegenek beolvasasa
-            if k == "(":
-                l_felteteles_szoveg = ""
-                while k != ")":
-                    k = f.read(1)
-                    if k == "[":          # nyito zarojel: feltetelek a valaszhoz
-                        l_feltetelek = ""
-                        k = f.read(1)
-                        while k != "]":    # addig olvassuk, ameddig el nem erjuk a csuko zarojelet
-                            l_feltetelek += k
-                            k = f.read(1)
-                        feltetelek = listat_olvas(l_feltetelek[:-1], no_space=True)
-                    else:
-                        l_felteteles_szoveg += k
-                l_valasz = Valasz(l_felteteles_szoveg[:-1], 0)
-                l_valasz.felteteleket_hozzaad(feltetelek)
-                oldal_buffer.felteteles_szoveg.append(l_valasz)
-            else:
-                oldal_buffer.szoveg += k
-
-        elif read_mode == 6:  # valasz beolvasasa
-            valasz_buffer = Valasz()
-            k = f.read(3)       # minden valasz igy kezdodik: '> * '
-            k = f.read(1)
-            if k == "[":           # nyito zarojel: feltetelek a valaszhoz
-                l_lista = ""
-                if listaszamlalo == 0:
-                    listaszamlalo += 1
-                    while k != "]":
-                        k = f.read(1)
-                        l_lista += k
-                    valasz_buffer.felteteleket_hozzaad(listat_olvas(l_lista[:-1], no_space=True))
-                elif listaszamlalo == 1:
-                    listaszamlalo += 1
-                    while k != "]":
-                        k = f.read(1)
-                        if k.isdigit(): l_lista += k
-                    valasz_buffer.celoldal = int(l_lista)
-            if k == "{":
-                l_jutalmak = ""
-                while k != "}":
-                    k = f.read(1)
-                    l_jutalmak += k
-                jutalmak = listat_olvas(l_jutalmak[:-1], no_space=True)
-            else:
-                valasz_buffer.szoveg += k
-
-        if read_mode == 10:
-            if ide_vezet == "":
-                ide_vezet = "-1"
-            konyv[int(oldalszam)-1].valasz_hozzaadasa(valasz_szoveg, int(ide_vezet), feltetelek, jutalmak)
-            valasz_szoveg = ""
-            ide_vezet = 0
-            feltetelek = []
-            jutalmak = []
-            read_mode = 1
-    konyv.cim = konyv.cim.strip()
+    konyv.cim = konyv.cim.strip()  # kosza spacek es enterek eltuntetese a cim vegerol
     f.close()
 
 
@@ -345,9 +287,18 @@ class Oldal:
 
 
 class Konyv(list):
-    def __init__(self):
+    def __init__(self, p_fn = None):
+        self.faljnev = p_fn
         self.cim = "Nevtelen kaland"
         list.__init__(self)
+
+    def megnyit(self, p_fn = None):
+        if p_fn is not None:
+            self.faljnev = p_fn
+        if self.faljnev is not None:
+            print("Nincs fajlnev megadva")
+        else:
+            beolvas(self.faljnev, self)
 
     def kibovit(self, legnagyobb_oldalszam):
         while legnagyobb_oldalszam >= len(self):
@@ -356,30 +307,3 @@ class Konyv(list):
     def oldal_hozzaadd(self, oldalszam, szoveg):
         self.kibovit(oldalszam)
         self[oldalszam].szoveg = szoveg
-
-    def feltolt_faljbol(self, faljnev):
-        l_oldalt_olvas = False
-        valaszt_olvas = False
-        szam = 0
-        kf = open(faljnev, 'r')
-        for line in kf:
-            if line[0] == '-':
-                if line[1] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-                    adatok = line.split('-')
-                    szam = adatok[1]
-                    self.kibovit(szam)
-                    l_oldalt_olvas = True
-                    valaszt_olvas = False
-                elif line[1] == '>':
-                    l_oldalt_olvas = False
-                    valaszt_olvas = True
-            else:
-                if l_oldalt_olvas:
-                    self[szam].szoveg = line
-                elif valaszt_olvas:
-                    adat = line.split('[')
-                    szoveg = adat[0]
-                    adat = adat[1].split(']')
-                    valaszok = adat[0].split('/')
-                    cel = int(adat[1][1:])
-                    self[szam].valasz_hozzaadasa(szoveg, cel, valaszok)
