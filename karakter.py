@@ -1,17 +1,26 @@
 import random
+import targy
 
-TULAJDONSAGOK = ["ero", "ugyesseg", "gyorsasag", "intelligencia"]
+szint_tabla = {1: 0, 2: 100, 3:200, 4:500}
 
 
-class Karakter:
-    def __init__(self):
-        self.nev = "Nevtelen Karakter"
-        self.leiras = "Egy ismeretlen, jellegtelen kulseju szemely all veled szemben."
+class Karakter(dict):
+    TULAJDONSAGOK = ["ero", "ugyesseg", "gyorsasag", "intelligencia"]
+
+    def __init__(self,
+                 p_nev="Nevtelen Karakter",
+                 p_leiras="Egy ismeretlen, jellegtelen kulseju szemely all veled szemben.",
+                 p_alapertek=10,
+                 **p_tulajdonsagok):
+        self.nev = p_nev
+        self.leiras = p_leiras
         self.targyak = []
-        self.tulajdonsagok = {}
-        self.max_eletero = 100
-        self.eletero = 100
-        self.tulajdonsagok_feltoltese(10)
+        self.tudas = []  # =kepzettsegek
+        dict.__init__(self)
+        self.eletero = [100, 100]
+        for l_tul in Karakter.TULAJDONSAGOK:
+            if l_tul in p_tulajdonsagok.keys(): self[l_tul] = p_tulajdonsagok[l_tul]
+            else:                               self[l_tul] = p_alapertek
 
     def van_e_nala(self, targy_neve):
         for targy in self.targyak:
@@ -20,21 +29,51 @@ class Karakter:
         return False
 
     def eleterot_modosit(self, mennyiseg):
-        uj_eletero = self.eletero + mennyiseg
-        if uj_eletero <= 0:
-            self.eletero = 0
-        elif uj_eletero > self.max_eletero:
-            self.eletero = self.max_eletero
+        uj_eletero = self.eletero[1] + mennyiseg
+        if uj_eletero < 0:
+            self.eletero[1] = 0
+        elif uj_eletero > self.eletero[0]:
+            self.eletero[1] = self.eletero[0]
         else:
             self.eletero = uj_eletero
-
-    def tulajdonsagok_feltoltese(self, alapertek=10):
-        for tul in TULAJDONSAGOK:
-            self.tulajdonsagok[tul] = alapertek
 
     def nevet_general(self, nevek_listaja, vezeteknevek_listaja=None):
         random_szam = random.randint(0, len(nevek_listaja)-1)
         self.nev = nevek_listaja[random_szam]
+
+    def felvesz(self, p_targy):
+        self.targyak.append(p_targy)
+        for l_tul, l_bonusz in p_targy.items():
+            if l_tul in Karakter.TULAJDONSAGOK:
+                self[l_tul] += l_bonusz
+
+    def letesz(self, p_targy):
+        leadott_targy = None
+        for i in range(len(self.targyak)):
+            if self.targyak[i].cimke == p_targy.cimke:
+                leadott_targy = self.targyak.pop(i)
+                break
+        if leadott_targy is None: return False
+        for l_tul in self.keys():
+            if l_tul in leadott_targy.keys():
+                self[l_tul] -= leadott_targy[l_tul]
+        return True
+
+    def tanul(self, p_uj_tudas, ismetlodes=False):
+        if ismetlodes:
+            for l_t in self.tudas:
+                if l_t.cimke == p_uj_tudas.cimke:
+                    return
+        self.tudas.append(p_uj_tudas)
+
+    def elfelejt(self, p_tudas):
+        elfelejtett_tudas = None
+        for i in range(len(self.tudas)):
+            if self.tudas[i].cimke == p_tudas.cimke:
+                elfelejtett_tudas = self.tudas.pop(i)
+                break
+        if elfelejtett_tudas is None: return False
+        return True
 
 
 class Ork(Karakter):
@@ -91,7 +130,7 @@ class Targy:
 
     def uj_feltetel(self, tulajdonsag, bonusz):
         '''Uj hasznalati feltetelt ad a targyhoz'''
-        if tulajdonsag in TULAJDONSAGOK:  # annak vizsgalata, hogy letezo tulajdonsag van-e megadva (robosztussag)
+        if tulajdonsag in Karakter.TULAJDONSAGOK:  # annak vizsgalata, hogy letezo tulajdonsag van-e megadva (robosztussag)
             self.feltetelek[tulajdonsag] = bonusz
             return True
         else:
@@ -101,7 +140,7 @@ class Targy:
         '''Egy karakter tulajdonsaglistajat varja parameterkent, es visszaadja,
         hogy a targy hasznalhato-e az adott kepessegekkel.'''
         hasznalhato = True
-        for tul in TULAJDONSAGOK:  # vegigmegy a lehetseges tulajdonsagokon
+        for tul in Karakter.TULAJDONSAGOK:  # vegigmegy a lehetseges tulajdonsagokon
             if tul in self.feltetelek.keys():  # ha ez nincs a feltetelek kozott, megy a kovatkezore...
                 #       ... igy, ha a targynak nincs feltetele azonnal hasznalhato
                 if karakter_tulajdonsagok[tul] < self.feltetelek[tul]:  # ha kisebb a karakter tul.-a mint a feltetel
