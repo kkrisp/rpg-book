@@ -3,7 +3,7 @@
 ### 1.Oldal
 Péntek este van. Rákészültél az éjszakára. Zsoca, a legjobb haverod azt mondta, ma zsákolni fogtok. Mármint nem egymással, hanem nőkkel. Igaziakkal. Lélegzőkkel. Bár, ha az nem jönne össze, tőle akár ti ketten is… de ezt majd megbeszélitek később. Álljunk pozitívan a kérdéshez, mondta Zsoca, a legjobb haverod a világon. Felvetted a legnyálasabb garbód, amit anyutól kaptál karácsonyra, és kifényezted a makkos súzt, készen állsz, mi a faszt teszel, haver?
 > * Megvárom, amíg Zsoca felvesz a Skodájával. [3.oldal]
-> * Lelopakodom a konyhába, és a hűtő tetejéről elviszem a fater fél üveg vodkáját. {vodka} [51.oldal]
+> * Lelopakodom a konyhába, és a hűtő tetejéről elviszem a fater fél üveg vodkáját.{vodka} [51.oldal]
 > * Lenémítom a telefonom, hogy ne halljam, ha Zsoca hív, levetkőzök, és lefekszem aludni. [2.oldal]
 
 ### 2. Oldal
